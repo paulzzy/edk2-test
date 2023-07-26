@@ -423,7 +423,7 @@ ChangePxeState (
 
 EFI_STATUS
 ReInitPxeBaseCode (
-  EFI_PXE_BASE_CODE_PROTOCOL    *BcInterface
+  EFI_PXE_BASE_CODE_PROTOCOL    *BaseCodeInterface
 );
 
 typedef enum {
@@ -494,12 +494,12 @@ NewCallBack (
 EFI_STATUS
 HookReturnAbortCallBack (
   EFI_PXE_BASE_CODE_FUNCTION FuncNum,
-  EFI_PXE_BASE_CODE_PROTOCOL *BcInterface
+  EFI_PXE_BASE_CODE_PROTOCOL *BaseCodeInterface
   );
 
 EFI_STATUS
 UnHookReturnAbortCallBack (
-  EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface
+  EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface
   );
 
 EFI_STATUS

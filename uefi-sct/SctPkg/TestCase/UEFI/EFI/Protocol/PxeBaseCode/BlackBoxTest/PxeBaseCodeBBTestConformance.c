@@ -48,7 +48,7 @@ BBTestNewStartConformanceTest (
   EFI_STANDARD_TEST_LIBRARY_PROTOCOL    *StandardLib;
   EFI_STATUS                            Status;
   EFI_TEST_ASSERTION                    AssertionType;
-  EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface;
 
   //
   // Get the Standard Library Interface
@@ -66,13 +66,13 @@ BBTestNewStartConformanceTest (
   //
   // Get the EFI_PXE_BASE_CODE_PROTOCOL Protocol interface to be tested
   //
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
   //
   // Disable EFI_PXE_BASE_CODE_PROTOCOL Protocol interface
   //
-  if (BcInterface->Mode->Started) {
-    Status = BcInterface->Stop (BcInterface);
+  if (BaseCodeInterface->Mode->Started) {
+    Status = BaseCodeInterface->Stop (BaseCodeInterface);
     if (EFI_ERROR (Status)) {
       StandardLib->RecordAssertion (
                      StandardLib,
@@ -91,7 +91,7 @@ BBTestNewStartConformanceTest (
   //
   // Enable EFI_PXE_BASE_CODE_PROTOCOL Protocol interface in IPv4
   //
-  Status = BcInterface->Start (BcInterface, FALSE);
+  Status = BaseCodeInterface->Start (BaseCodeInterface, FALSE);
   if (EFI_ERROR (Status)) {
     StandardLib->RecordAssertion (
                    StandardLib,
@@ -109,7 +109,7 @@ BBTestNewStartConformanceTest (
   //
   // Start() while EFI_PXE_BASE_CODE_PROTOCOL Protocol already started
   //
-  Status = BcInterface->Start (BcInterface, FALSE);
+  Status = BaseCodeInterface->Start (BaseCodeInterface, FALSE);
   if (Status == EFI_ALREADY_STARTED) {
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   } else if ((Status == EFI_DEVICE_ERROR) || (Status == EFI_OUT_OF_RESOURCES)) {
@@ -131,7 +131,7 @@ BBTestNewStartConformanceTest (
   //
   // Disable EFI_PXE_BASE_CODE_PROTOCOL Protocol interface
   //
-  Status = BcInterface->Stop (BcInterface);
+  Status = BaseCodeInterface->Stop (BaseCodeInterface);
   if (EFI_ERROR (Status)) {
     StandardLib->RecordAssertion (
                    StandardLib,
@@ -146,11 +146,11 @@ BBTestNewStartConformanceTest (
     return Status;
   }
 
-  if (BcInterface->Mode->Ipv6Supported && BcInterface->Mode->Ipv6Available) {
+  if (BaseCodeInterface->Mode->Ipv6Supported && BaseCodeInterface->Mode->Ipv6Available) {
     //
     // Enable EFI_PXE_BASE_CODE_PROTOCOL Protocol interface in IPv6
     //
-    Status = BcInterface->Start (BcInterface, TRUE);
+    Status = BaseCodeInterface->Start (BaseCodeInterface, TRUE);
     if (EFI_ERROR (Status)) {
       StandardLib->RecordAssertion (
                      StandardLib,
@@ -168,7 +168,7 @@ BBTestNewStartConformanceTest (
     //
     // Start while EFI_PXE_BASE_CODE_PROTOCOL Protocol already started
     //
-    Status = BcInterface->Start (BcInterface, TRUE);
+    Status = BaseCodeInterface->Start (BaseCodeInterface, TRUE);
     if (Status == EFI_ALREADY_STARTED) {
       AssertionType = EFI_TEST_ASSERTION_PASSED;
     } else if ((Status == EFI_DEVICE_ERROR) || (Status == EFI_OUT_OF_RESOURCES)) {
@@ -190,7 +190,7 @@ BBTestNewStartConformanceTest (
     //
     // Start while EFI_PXE_BASE_CODE_PROTOCOL Protocol is not supported
     //
-    Status = BcInterface->Start (BcInterface, TRUE);
+    Status = BaseCodeInterface->Start (BaseCodeInterface, TRUE);
     if (Status == EFI_UNSUPPORTED) {
       AssertionType = EFI_TEST_ASSERTION_PASSED;
     } else {
@@ -234,7 +234,7 @@ BBTestNewStopConformanceTest (
   EFI_STANDARD_TEST_LIBRARY_PROTOCOL    *StandardLib;
   EFI_STATUS                            Status;
   EFI_TEST_ASSERTION                    AssertionType;
-  EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface;
 
   //
   // Get the Standard Library Interface
@@ -252,13 +252,13 @@ BBTestNewStopConformanceTest (
   //
   // Get the EFI_PXE_BASE_CODE_PROTOCOL Protocol interface to be tested
   //
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
   //
   // Disable EFI_PXE_BASE_CODE_PROTOCOL Protocol interface
   //
-  if (BcInterface->Mode->Started) {
-    Status = BcInterface->Stop (BcInterface);
+  if (BaseCodeInterface->Mode->Started) {
+    Status = BaseCodeInterface->Stop (BaseCodeInterface);
     if (EFI_ERROR (Status)) {
       StandardLib->RecordAssertion (
                      StandardLib,
@@ -274,11 +274,11 @@ BBTestNewStopConformanceTest (
     }
   }
 
-  if (BcInterface->Mode->Ipv6Supported && BcInterface->Mode->Ipv6Available) {
+  if (BaseCodeInterface->Mode->Ipv6Supported && BaseCodeInterface->Mode->Ipv6Available) {
     //
     // Enable EFI_PXE_BASE_CODE_PROTOCOL Protocol interface in Ipv6
     //
-		Status = BcInterface->Start (BcInterface, TRUE);
+		Status = BaseCodeInterface->Start (BaseCodeInterface, TRUE);
     if (EFI_ERROR (Status)) {
       StandardLib->RecordAssertion (
                      StandardLib,
@@ -295,7 +295,7 @@ BBTestNewStopConformanceTest (
     //
     // Disable EFI_PXE_BASE_CODE_PROTOCOL Protocol interface
     //
-    Status = BcInterface->Stop (BcInterface);
+    Status = BaseCodeInterface->Stop (BaseCodeInterface);
     if (EFI_ERROR (Status)) {
       StandardLib->RecordAssertion (
                      StandardLib,
@@ -312,7 +312,7 @@ BBTestNewStopConformanceTest (
     //
     // Call Stop() while EFI_PXE_BASE_CODE_PROTOCOL already disabled
     //
-    Status = BcInterface->Stop (BcInterface);
+    Status = BaseCodeInterface->Stop (BaseCodeInterface);
     if (Status == EFI_NOT_STARTED) {
       AssertionType = EFI_TEST_ASSERTION_PASSED;
     } else if (Status == EFI_DEVICE_ERROR) {
@@ -335,7 +335,7 @@ BBTestNewStopConformanceTest (
   //
   // Enable EFI_PXE_BASE_CODE_PROTOCOL Protocol interface in Ipv4
   //
-  Status = BcInterface->Start (BcInterface, FALSE);
+  Status = BaseCodeInterface->Start (BaseCodeInterface, FALSE);
   if (EFI_ERROR (Status)) {
     StandardLib->RecordAssertion (
                    StandardLib,
@@ -352,7 +352,7 @@ BBTestNewStopConformanceTest (
   //
   // Disable EFI_PXE_BASE_CODE_PROTOCOL Protocol interface
   //
-  Status = BcInterface->Stop (BcInterface);
+  Status = BaseCodeInterface->Stop (BaseCodeInterface);
   if (EFI_ERROR (Status)) {
     StandardLib->RecordAssertion (
                    StandardLib,
@@ -369,7 +369,7 @@ BBTestNewStopConformanceTest (
   //
   // Call Stop() while EFI_PXE_BASE_CODE_PROTOCOL already disabled
   //
-  Status = BcInterface->Stop (BcInterface);
+  Status = BaseCodeInterface->Stop (BaseCodeInterface);
   if (Status == EFI_NOT_STARTED) {
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   } else if (Status == EFI_DEVICE_ERROR) {
@@ -414,7 +414,7 @@ BBTestStartConformanceTest (
   EFI_STANDARD_TEST_LIBRARY_PROTOCOL    *StandardLib;
   EFI_STATUS                            Status;
   EFI_TEST_ASSERTION                    AssertionType;
-  EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface;
 
   //
   // Get the Standard Library Interface
@@ -432,12 +432,12 @@ BBTestStartConformanceTest (
   //
   // Get the EFI_PXE_BASE_CODE_PROTOCOL Protocol interface to be tested
   //
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
   //
   // Change EFI_PXE_BASE_CODE_PROTOCOL Protocol state to enabled
   //
-  Status = ChangePxeState (BcInterface, FALSE, BcInterface->Mode->Started, TRUE);
+  Status = ChangePxeState (BaseCodeInterface, FALSE, BaseCodeInterface->Mode->Started, TRUE);
   if (EFI_ERROR(Status)) {
     return Status;
   }
@@ -445,7 +445,7 @@ BBTestStartConformanceTest (
   //
   // Start()  while EFI_PXE_BASE_CODE_PROTOCOL Protocol already started
   //
-  Status = BcInterface->Start (BcInterface, FALSE);
+  Status = BaseCodeInterface->Start (BaseCodeInterface, FALSE);
   if (Status == EFI_ALREADY_STARTED) {
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   } else {
@@ -465,7 +465,7 @@ BBTestStartConformanceTest (
    //
   // Change EFI_PXE_BASE_CODE_PROTOCOL Protocol to disabled
   //
-  Status = ChangePxeState (BcInterface, FALSE, BcInterface->Mode->Started, FALSE);
+  Status = ChangePxeState (BaseCodeInterface, FALSE, BaseCodeInterface->Mode->Started, FALSE);
   if (EFI_ERROR(Status)) {
     return Status;
   }
@@ -473,9 +473,9 @@ BBTestStartConformanceTest (
   //
   // Start EFI_PXE_BASE_CODE_PROTOCOL using IPV6 while IPV6 not supported
   //
-  BcInterface->Mode->Ipv6Supported = FALSE;
+  BaseCodeInterface->Mode->Ipv6Supported = FALSE;
 
-  Status = BcInterface->Start (BcInterface, TRUE);
+  Status = BaseCodeInterface->Start (BaseCodeInterface, TRUE);
   if (Status == EFI_UNSUPPORTED) {
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   } else {
@@ -517,7 +517,7 @@ BBTestStopConformanceTest (
   EFI_STANDARD_TEST_LIBRARY_PROTOCOL    *StandardLib;
   EFI_STATUS                            Status;
   EFI_TEST_ASSERTION                    AssertionType;
-  EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface;
 
   //
   // Get the Standard Library Interface
@@ -535,12 +535,12 @@ BBTestStopConformanceTest (
   //
   // Get the EFI_PXE_BASE_CODE_PROTOCOL Protocol interface to be tested
   //
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
   //
   // Make sure the EFI_PXE_BASE_CODE_PROTOCOL Protocol is disabled
   //
-  Status = ChangePxeState (BcInterface, FALSE, BcInterface->Mode->Started, FALSE);
+  Status = ChangePxeState (BaseCodeInterface, FALSE, BaseCodeInterface->Mode->Started, FALSE);
   if (EFI_ERROR(Status)) {
     StandardLib->RecordAssertion (
                    StandardLib,
@@ -558,7 +558,7 @@ BBTestStopConformanceTest (
   //
   // Call Stop() while EFI_PXE_BASE_CODE_PROTOCOL already disabled
   //
-  Status = BcInterface->Stop (BcInterface);
+  Status = BaseCodeInterface->Stop (BaseCodeInterface);
   if (Status == EFI_NOT_STARTED) {
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   } else {
@@ -600,7 +600,7 @@ BBTestDhcpConformanceTest (
   EFI_STANDARD_TEST_LIBRARY_PROTOCOL    *StandardLib;
   EFI_STATUS                            Status;
   EFI_TEST_ASSERTION                    AssertionType;
-  EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface;
 
   //
   // Get the Standard Library Interface
@@ -618,12 +618,12 @@ BBTestDhcpConformanceTest (
   //
   // Get the EFI_PXE_BASE_CODE_PROTOCOL Protocol interface to be tested
   //
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
   //
   // Change EFI_PXE_BASE_CODE_PROTOCOL Protocol to disabled
   //
-  Status = ChangePxeState (BcInterface, FALSE, BcInterface->Mode->Started, FALSE);
+  Status = ChangePxeState (BaseCodeInterface, FALSE, BaseCodeInterface->Mode->Started, FALSE);
   if (EFI_ERROR(Status)) {
     return Status;
   }
@@ -631,7 +631,7 @@ BBTestDhcpConformanceTest (
   //
   // 5.3.2.1 Call Dhcp() while EFI_PXE_BASE_CODE_PROTOCOL already disabled
   //
-  Status = BcInterface->Dhcp (BcInterface, FALSE);
+  Status = BaseCodeInterface->Dhcp (BaseCodeInterface, FALSE);
   if (Status == EFI_NOT_STARTED) {
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   } else {
@@ -651,7 +651,7 @@ BBTestDhcpConformanceTest (
   //
   // Change EFI_PXE_BASE_CODE_PROTOCOL Protocol to enabled
   //
-  Status = ChangePxeState (BcInterface, FALSE, BcInterface->Mode->Started, TRUE);
+  Status = ChangePxeState (BaseCodeInterface, FALSE, BaseCodeInterface->Mode->Started, TRUE);
   if (EFI_ERROR(Status)) {
     return Status;
   }
@@ -665,7 +665,7 @@ BBTestDhcpConformanceTest (
   //
   // 5.3.2.2 Call Dhcp() while DHCP Server shutdown
   //
-  Status = BcInterface->Dhcp (BcInterface, FALSE);
+  Status = BaseCodeInterface->Dhcp (BaseCodeInterface, FALSE);
   if (Status == EFI_TIMEOUT) {
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   } else {
@@ -691,7 +691,7 @@ BBTestDhcpConformanceTest (
   //
   // 5.3.2.3 Call Dhcp() while DHCP Server only assign IP address
   //
-  Status = BcInterface->Dhcp (BcInterface, FALSE);
+  Status = BaseCodeInterface->Dhcp (BaseCodeInterface, FALSE);
   if (Status == EFI_NO_RESPONSE) {
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   } else {
@@ -715,7 +715,7 @@ BBTestDhcpConformanceTest (
   //
   // Hook the Callback function
   //
-  Status = HookReturnAbortCallBack (EFI_PXE_BASE_CODE_FUNCTION_DHCP, BcInterface);
+  Status = HookReturnAbortCallBack (EFI_PXE_BASE_CODE_FUNCTION_DHCP, BaseCodeInterface);
   if (EFI_ERROR(Status)) {
     StandardLib->RecordAssertion (
                    StandardLib,
@@ -736,7 +736,7 @@ BBTestDhcpConformanceTest (
   SctPrint (L"\r\nSetup Dhcp Server\r\n");
   WaitForAnyInput ();
 
-  Status = BcInterface->Dhcp (BcInterface, FALSE);
+  Status = BaseCodeInterface->Dhcp (BaseCodeInterface, FALSE);
   if ((Status == EFI_ABORTED) && gCallBackInvoked) {
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   } else {
@@ -757,7 +757,7 @@ BBTestDhcpConformanceTest (
   //
   // Unhook the Callback function
   //
-  UnHookReturnAbortCallBack (BcInterface);
+  UnHookReturnAbortCallBack (BaseCodeInterface);
 
   return EFI_SUCCESS;
 }
@@ -784,7 +784,7 @@ BBTestDiscoverConformanceTest (
   EFI_STANDARD_TEST_LIBRARY_PROTOCOL    *StandardLib;
   EFI_STATUS                            Status;
   EFI_TEST_ASSERTION                    AssertionType;
-  EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface;
 
   //
   // Get the Standard Library Interface
@@ -802,12 +802,12 @@ BBTestDiscoverConformanceTest (
   //
   // Get the EFI_PXE_BASE_CODE_PROTOCOL Protocol interface to be tested
   //
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
   //
   // Change EFI_PXE_BASE_CODE_PROTOCOL Protocol to disabled
   //
-  Status = ChangePxeState (BcInterface, FALSE, BcInterface->Mode->Started, FALSE);
+  Status = ChangePxeState (BaseCodeInterface, FALSE, BaseCodeInterface->Mode->Started, FALSE);
   if (EFI_ERROR(Status)) {
     return Status;
   }
@@ -815,8 +815,8 @@ BBTestDiscoverConformanceTest (
   //
   // 5.4.2.1 Call Discover() while EFI_PXE_BASE_CODE_PROTOCOL is disabled
   //
-  Status = BcInterface->Discover (
-             BcInterface,
+  Status = BaseCodeInterface->Discover (
+             BaseCodeInterface,
              EFI_PXE_BASE_CODE_BOOT_TYPE_BOOTSTRAP,
              EFI_PXE_BASE_CODE_BOOT_LAYER_INITIAL,
              FALSE,
@@ -842,7 +842,7 @@ BBTestDiscoverConformanceTest (
   //
   // Change EFI_PXE_BASE_CODE_PROTOCOL Protocol to enabled
   //
-  Status = ChangePxeState (BcInterface, FALSE, BcInterface->Mode->Started, TRUE);
+  Status = ChangePxeState (BaseCodeInterface, FALSE, BaseCodeInterface->Mode->Started, TRUE);
   if (EFI_ERROR(Status)) {
     return Status;
   }
@@ -852,7 +852,7 @@ BBTestDiscoverConformanceTest (
   //
   SctPrint (L"\r\nPlease Setup DHCP Server\r\n");
   WaitForAnyInput ();
-  Status = BcInterface->Dhcp (BcInterface, FALSE);
+  Status = BaseCodeInterface->Dhcp (BaseCodeInterface, FALSE);
   if (EFI_ERROR(Status))
   {
     StandardLib->RecordAssertion (
@@ -876,8 +876,8 @@ BBTestDiscoverConformanceTest (
   //
   // 5.4.2.2 Call Discover() while Boot Server shutdown
   //
-  Status = BcInterface->Discover (
-                          BcInterface,
+  Status = BaseCodeInterface->Discover (
+                          BaseCodeInterface,
                           EFI_PXE_BASE_CODE_BOOT_TYPE_BOOTSTRAP,
                           EFI_PXE_BASE_CODE_BOOT_LAYER_INITIAL,
                           FALSE,
@@ -904,7 +904,7 @@ BBTestDiscoverConformanceTest (
   // 4.4.2.3 Call Back Function abort while Discover()
   //
 
-  Status = HookReturnAbortCallBack (EFI_PXE_BASE_CODE_FUNCTION_DISCOVER, BcInterface);
+  Status = HookReturnAbortCallBack (EFI_PXE_BASE_CODE_FUNCTION_DISCOVER, BaseCodeInterface);
   if (EFI_ERROR(Status)) {
     StandardLib->RecordAssertion (
                    StandardLib,
@@ -925,8 +925,8 @@ BBTestDiscoverConformanceTest (
   SctPrint (L"\r\nSetup BOOT Server environment\r\n");
   WaitForAnyInput ();
 
-  Status = BcInterface->Discover (
-                          BcInterface,
+  Status = BaseCodeInterface->Discover (
+                          BaseCodeInterface,
                           EFI_PXE_BASE_CODE_BOOT_TYPE_BOOTSTRAP,
                           EFI_PXE_BASE_CODE_BOOT_LAYER_INITIAL,
                           FALSE,
@@ -952,7 +952,7 @@ BBTestDiscoverConformanceTest (
   //
   // Unhook the Callback function
   //
-  UnHookReturnAbortCallBack (BcInterface);
+  UnHookReturnAbortCallBack (BaseCodeInterface);
 
   return EFI_SUCCESS;
 }
@@ -980,7 +980,7 @@ BBTestMtftpConformanceTest (
   EFI_TEST_PROFILE_LIBRARY_PROTOCOL    *ProfileLib;
   EFI_STATUS                            Status;
   EFI_TEST_ASSERTION                    AssertionType;
-  EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface;
   UINTN                                 BlockSize=512;
   EFI_IP_ADDRESS                        ServerIp;
   CHAR8                                 *FileName;
@@ -1005,7 +1005,7 @@ BBTestMtftpConformanceTest (
   //
   // Get the EFI_PXE_BASE_CODE_PROTOCOL Protocol interface to be tested
   //
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
   //
   // Fill Parameters (ServerIp, FileName, BufferPtr)
@@ -1069,7 +1069,7 @@ BBTestMtftpConformanceTest (
   //
   // Change EFI_PXE_BASE_CODE_PROTOCOL Protocol to disabled
   //
-  Status = ChangePxeState (BcInterface, FALSE, BcInterface->Mode->Started, FALSE);
+  Status = ChangePxeState (BaseCodeInterface, FALSE, BaseCodeInterface->Mode->Started, FALSE);
   if (EFI_ERROR(Status)) {
     StandardLib->RecordAssertion (
                    StandardLib,
@@ -1084,8 +1084,8 @@ BBTestMtftpConformanceTest (
     return Status;
   }
 
-  Status = BcInterface->Mtftp (
-                          BcInterface,
+  Status = BaseCodeInterface->Mtftp (
+                          BaseCodeInterface,
                           EFI_PXE_BASE_CODE_TFTP_GET_FILE_SIZE,
                           NULL,
                           FALSE,
@@ -1113,7 +1113,7 @@ BBTestMtftpConformanceTest (
                  );
 
   // Enable EFI_PXE_BASE_CODE_PROTOCOL protocol if needed
-  Status = ChangePxeState (BcInterface, FALSE, BcInterface->Mode->Started, TRUE);
+  Status = ChangePxeState (BaseCodeInterface, FALSE, BaseCodeInterface->Mode->Started, TRUE);
   if (EFI_ERROR(Status)) {
     StandardLib->RecordAssertion (
                    StandardLib,
@@ -1133,7 +1133,7 @@ BBTestMtftpConformanceTest (
   //
   SctPrint (L"\r\nPlease Setup DHCP Server\r\n");
   WaitForAnyInput ();
-  Status = BcInterface->Dhcp (BcInterface, FALSE);
+  Status = BaseCodeInterface->Dhcp (BaseCodeInterface, FALSE);
   if (EFI_ERROR(Status))
   {
     StandardLib->RecordAssertion (
@@ -1158,8 +1158,8 @@ BBTestMtftpConformanceTest (
   SctPrint (L"\r\nStop TFTP Server\r\n");
   WaitForAnyInput ();
 
-  Status = BcInterface->Mtftp (
-                          BcInterface,
+  Status = BaseCodeInterface->Mtftp (
+                          BaseCodeInterface,
                           EFI_PXE_BASE_CODE_TFTP_GET_FILE_SIZE,
                           NULL,
                           FALSE,
@@ -1212,8 +1212,8 @@ BBTestMtftpConformanceTest (
   SctPrint (L"\r\nShutdown M/TFTP Server\r\n");
   WaitForAnyInput ();
 
-  Status = BcInterface->Mtftp (
-                          BcInterface,
+  Status = BaseCodeInterface->Mtftp (
+                          BaseCodeInterface,
                           EFI_PXE_BASE_CODE_TFTP_GET_FILE_SIZE,
                           NULL,
                           FALSE,
@@ -1249,8 +1249,8 @@ BBTestMtftpConformanceTest (
   SctPrint (L"\r\nDelete Requested File from M/TFTP Server\r\n");
   WaitForAnyInput ();
 
-  Status = BcInterface->Mtftp (
-                          BcInterface,
+  Status = BaseCodeInterface->Mtftp (
+                          BaseCodeInterface,
                           EFI_PXE_BASE_CODE_TFTP_GET_FILE_SIZE,
                           NULL,
                           FALSE,
@@ -1300,8 +1300,8 @@ BBTestMtftpConformanceTest (
     return Status;
   }
 
-  Status = BcInterface->Mtftp (
-                          BcInterface,
+  Status = BaseCodeInterface->Mtftp (
+                          BaseCodeInterface,
                           EFI_PXE_BASE_CODE_TFTP_READ_DIRECTORY,
                           NULL,
                           FALSE,
@@ -1353,8 +1353,8 @@ BBTestMtftpConformanceTest (
     CloseTestIniFile (ProfileLib, FileHandle);
     return Status;
   }
-  Status = BcInterface->Mtftp (
-                          BcInterface,
+  Status = BaseCodeInterface->Mtftp (
+                          BaseCodeInterface,
                           EFI_PXE_BASE_CODE_TFTP_WRITE_FILE,
                           Buffer,
                           FALSE,
@@ -1390,7 +1390,7 @@ BBTestMtftpConformanceTest (
   //
   // Hook the Callback function
   //
-  Status = HookReturnAbortCallBack (EFI_PXE_BASE_CODE_FUNCTION_MTFTP, BcInterface);
+  Status = HookReturnAbortCallBack (EFI_PXE_BASE_CODE_FUNCTION_MTFTP, BaseCodeInterface);
   if (EFI_ERROR(Status)) {
     StandardLib->RecordAssertion (
                    StandardLib,
@@ -1405,8 +1405,8 @@ BBTestMtftpConformanceTest (
     return Status;
   }
 
-  Status = BcInterface->Mtftp (
-                          BcInterface,
+  Status = BaseCodeInterface->Mtftp (
+                          BaseCodeInterface,
                           EFI_PXE_BASE_CODE_TFTP_GET_FILE_SIZE,
                           NULL,
                           FALSE,
@@ -1437,7 +1437,7 @@ BBTestMtftpConformanceTest (
   //
   // Unhook the Callback function
   //
-  UnHookReturnAbortCallBack (BcInterface);
+  UnHookReturnAbortCallBack (BaseCodeInterface);
 
   return EFI_SUCCESS;
 }
@@ -1464,7 +1464,7 @@ BBTestUdpWriteConformanceTest (
   EFI_STANDARD_TEST_LIBRARY_PROTOCOL    *StandardLib;
   EFI_STATUS                            Status;
   EFI_TEST_ASSERTION                    AssertionType;
-  EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface;
   EFI_IP_ADDRESS                        DestIp;
   EFI_PXE_BASE_CODE_UDP_PORT            DestPort;
   UINTN                                 BufferSize;
@@ -1492,10 +1492,10 @@ BBTestUdpWriteConformanceTest (
   //
   // Get the EFI_PXE_BASE_CODE_PROTOCOL Protocol interface to be tested
   //
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
   // Disable EFI_PXE_BASE_CODE_PROTOCOL protocol if needed
-  Status = ChangePxeState (BcInterface, FALSE, BcInterface->Mode->Started, FALSE);
+  Status = ChangePxeState (BaseCodeInterface, FALSE, BaseCodeInterface->Mode->Started, FALSE);
   if (EFI_ERROR(Status)) {
     return Status;
   }
@@ -1509,8 +1509,8 @@ BBTestUdpWriteConformanceTest (
   DestIp.Addr[3] = 100;
   DestPort = 200;
   BufferSize = MAX_UDP_SIZE/2;
-  Status = BcInterface->UdpWrite (
-                          BcInterface,
+  Status = BaseCodeInterface->UdpWrite (
+                          BaseCodeInterface,
                           0,
                           &DestIp,
                           &DestPort,
@@ -1541,7 +1541,7 @@ BBTestUdpWriteConformanceTest (
                  );
 
   // Enable EFI_PXE_BASE_CODE_PROTOCOL protocol if needed
-  Status = ChangePxeState (BcInterface, FALSE, BcInterface->Mode->Started, TRUE);
+  Status = ChangePxeState (BaseCodeInterface, FALSE, BaseCodeInterface->Mode->Started, TRUE);
   if (EFI_ERROR(Status)) {
     return Status;
   }
@@ -1551,7 +1551,7 @@ BBTestUdpWriteConformanceTest (
   //
   SctPrint (L"\r\nPlease Setup DHCP Server\r\n");
   WaitForAnyInput ();
-  Status = BcInterface->Dhcp (BcInterface, FALSE);
+  Status = BaseCodeInterface->Dhcp (BaseCodeInterface, FALSE);
   if (EFI_ERROR(Status))
   {
     StandardLib->RecordAssertion (
@@ -1575,8 +1575,8 @@ BBTestUdpWriteConformanceTest (
   DestIp.Addr[3] = 100;
   DestPort = 200;
   BufferSize = MAX_UDP_SIZE*2;
-  Status = BcInterface->UdpWrite (
-                          BcInterface,
+  Status = BaseCodeInterface->UdpWrite (
+                          BaseCodeInterface,
                           0,
                           &DestIp,
                           &DestPort,
@@ -1609,7 +1609,7 @@ BBTestUdpWriteConformanceTest (
   //
   // 4.6.2.4 Call Back Function abort while UdpWrite()
   //
-  Status = HookReturnAbortCallBack (EFI_PXE_BASE_CODE_FUNCTION_UDP_WRITE, BcInterface);
+  Status = HookReturnAbortCallBack (EFI_PXE_BASE_CODE_FUNCTION_UDP_WRITE, BaseCodeInterface);
 
   DestIp.Addr[0] = 172;
   DestIp.Addr[1] = 16;
@@ -1617,8 +1617,8 @@ BBTestUdpWriteConformanceTest (
   DestIp.Addr[3] = 100;
   DestPort = 200;
   BufferSize = MAX_UDP_SIZE/2;
-  Status = BcInterface->UdpWrite (
-                          BcInterface,
+  Status = BaseCodeInterface->UdpWrite (
+                          BaseCodeInterface,
                           0,
                           &DestIp,
                           &DestPort,
@@ -1652,7 +1652,7 @@ BBTestUdpWriteConformanceTest (
   //
   // Unhook the Callback function
   //
-  UnHookReturnAbortCallBack (BcInterface);
+  UnHookReturnAbortCallBack (BaseCodeInterface);
 
   return EFI_SUCCESS;
 }
@@ -1679,7 +1679,7 @@ BBTestUdpReadConformanceTest (
   EFI_STANDARD_TEST_LIBRARY_PROTOCOL    *StandardLib;
   EFI_STATUS                            Status;
   EFI_TEST_ASSERTION                    AssertionType;
-  EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface;
   UINT16                                OpFlags;
   UINTN                                 BufferSize;
   VOID                                  *BufferPtr;
@@ -1703,7 +1703,7 @@ BBTestUdpReadConformanceTest (
   //
   // Get the EFI_PXE_BASE_CODE_PROTOCOL Protocol interface to be tested
   //
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
   // Malloc for data
   BufferSize = MAX_UDP_SIZE;
@@ -1713,7 +1713,7 @@ BBTestUdpReadConformanceTest (
   }
 
   // Disable EFI_PXE_BASE_CODE_PROTOCOL protocol if needed
-  Status = ChangePxeState (BcInterface, FALSE, BcInterface->Mode->Started, FALSE);
+  Status = ChangePxeState (BaseCodeInterface, FALSE, BaseCodeInterface->Mode->Started, FALSE);
   if (EFI_ERROR(Status)) {
     return Status;
   }
@@ -1722,8 +1722,8 @@ BBTestUdpReadConformanceTest (
             EFI_PXE_BASE_CODE_UDP_OPFLAGS_ANY_SRC_IP |
             EFI_PXE_BASE_CODE_UDP_OPFLAGS_ANY_SRC_PORT;
 
-  Status = BcInterface->UdpRead (
-                          BcInterface,
+  Status = BaseCodeInterface->UdpRead (
+                          BaseCodeInterface,
                           OpFlags,
                           NULL,
                           NULL,
@@ -1751,7 +1751,7 @@ BBTestUdpReadConformanceTest (
                  );
 
   // Enable EFI_PXE_BASE_CODE_PROTOCOL protocol if needed
-  Status = ChangePxeState (BcInterface, FALSE, BcInterface->Mode->Started, TRUE);
+  Status = ChangePxeState (BaseCodeInterface, FALSE, BaseCodeInterface->Mode->Started, TRUE);
   if (EFI_ERROR(Status)) {
     return Status;
   }
@@ -1761,7 +1761,7 @@ BBTestUdpReadConformanceTest (
   //
   SctPrint (L"\r\nPlease Setup DHCP Server\r\n");
   WaitForAnyInput ();
-  Status = BcInterface->Dhcp (BcInterface, FALSE);
+  Status = BaseCodeInterface->Dhcp (BaseCodeInterface, FALSE);
   if (EFI_ERROR(Status))
   {
     StandardLib->RecordAssertion (
@@ -1785,8 +1785,8 @@ BBTestUdpReadConformanceTest (
   OpFlags = EFI_PXE_BASE_CODE_UDP_OPFLAGS_ANY_SRC_IP |
             EFI_PXE_BASE_CODE_UDP_OPFLAGS_ANY_SRC_PORT;
 
-  Status = BcInterface->UdpRead (
-                        BcInterface,
+  Status = BaseCodeInterface->UdpRead (
+                        BaseCodeInterface,
                         OpFlags,
                         NULL,
                         NULL,
@@ -1818,8 +1818,8 @@ BBTestUdpReadConformanceTest (
   OpFlags = EFI_PXE_BASE_CODE_UDP_OPFLAGS_ANY_DEST_PORT |
             EFI_PXE_BASE_CODE_UDP_OPFLAGS_ANY_SRC_IP;
 
-  Status = BcInterface->UdpRead (
-                        BcInterface,
+  Status = BaseCodeInterface->UdpRead (
+                        BaseCodeInterface,
                         OpFlags,
                         NULL,
                         NULL,
@@ -1851,8 +1851,8 @@ BBTestUdpReadConformanceTest (
   OpFlags = EFI_PXE_BASE_CODE_UDP_OPFLAGS_ANY_DEST_PORT |
             EFI_PXE_BASE_CODE_UDP_OPFLAGS_ANY_SRC_PORT;
 
-  Status = BcInterface->UdpRead (
-                          BcInterface,
+  Status = BaseCodeInterface->UdpRead (
+                          BaseCodeInterface,
                           OpFlags,
                           NULL,
                           NULL,
@@ -1891,8 +1891,8 @@ BBTestUdpReadConformanceTest (
   SrcIp.Addr[3] = 123;
   SrcPort = 200;
 
-  Status = BcInterface->UdpRead (
-                          BcInterface,
+  Status = BaseCodeInterface->UdpRead (
+                          BaseCodeInterface,
                           OpFlags,
                           NULL,
                           &DestPort,
@@ -1922,7 +1922,7 @@ BBTestUdpReadConformanceTest (
   //
   // 4.7.2.5 Call Back Function abort while UdpRead()
   //
-  Status = HookReturnAbortCallBack (EFI_PXE_BASE_CODE_FUNCTION_UDP_READ, BcInterface);
+  Status = HookReturnAbortCallBack (EFI_PXE_BASE_CODE_FUNCTION_UDP_READ, BaseCodeInterface);
 
   //Wait for user send packet
   SctPrint (L"\r\nSend UDP Packet to this host");
@@ -1933,8 +1933,8 @@ BBTestUdpReadConformanceTest (
             EFI_PXE_BASE_CODE_UDP_OPFLAGS_ANY_SRC_IP |
             EFI_PXE_BASE_CODE_UDP_OPFLAGS_ANY_SRC_PORT;
 
-  Status = BcInterface->UdpRead (
-                          BcInterface,
+  Status = BaseCodeInterface->UdpRead (
+                          BaseCodeInterface,
                           OpFlags,
                           NULL,
                           NULL,
@@ -1965,7 +1965,7 @@ BBTestUdpReadConformanceTest (
   //
   // Unhook the Callback function
   //
-  UnHookReturnAbortCallBack (BcInterface);
+  UnHookReturnAbortCallBack (BaseCodeInterface);
 
   gtBS->FreePool (BufferPtr);
   return EFI_SUCCESS;
@@ -1993,7 +1993,7 @@ BBTestSetIpFilterConformanceTest (
   EFI_STANDARD_TEST_LIBRARY_PROTOCOL    *StandardLib;
   EFI_STATUS                            Status;
   EFI_TEST_ASSERTION                    AssertionType;
-  EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface;
   EFI_PXE_BASE_CODE_IP_FILTER           BcIpFilter;
 
   //
@@ -2012,10 +2012,10 @@ BBTestSetIpFilterConformanceTest (
   //
   // Get the EFI_PXE_BASE_CODE_PROTOCOL Protocol interface to be tested
   //
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
   // Disable EFI_PXE_BASE_CODE_PROTOCOL protocol if needed
-  Status = ChangePxeState (BcInterface, FALSE, BcInterface->Mode->Started, FALSE);
+  Status = ChangePxeState (BaseCodeInterface, FALSE, BaseCodeInterface->Mode->Started, FALSE);
   if (EFI_ERROR(Status)) {
     return Status;
   }
@@ -2028,7 +2028,7 @@ BBTestSetIpFilterConformanceTest (
   SetIpAddress ((EFI_IP_ADDRESS *)&(BcIpFilter.IpList[0]), 0x12345678);
   SetIpAddress ((EFI_IP_ADDRESS *)&(BcIpFilter.IpList[1]), 0x87654321);
 
-  Status = BcInterface->SetIpFilter (BcInterface, &BcIpFilter);
+  Status = BaseCodeInterface->SetIpFilter (BaseCodeInterface, &BcIpFilter);
   if (Status == EFI_NOT_STARTED) {
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   } else {
@@ -2072,10 +2072,10 @@ BBTestArpConformanceAutoTest (
   EFI_TEST_LOGGING_LIBRARY_PROTOCOL     *LoggingLib;
   EFI_STATUS                            Status;
   EFI_TEST_ASSERTION                    AssertionType;
-  EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface;
   EFI_IP_ADDRESS                        IpAddr;
 
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
   //
   // Get support library (Standard Lib, Profile Lib, Logging Lib)
@@ -2103,8 +2103,8 @@ BBTestArpConformanceAutoTest (
   //
   // Disable EFI_PXE_BASE_CODE_PROTOCOL Protocol interface
   //
-  if (BcInterface->Mode->Started) {
-    Status = BcInterface->Stop (BcInterface);
+  if (BaseCodeInterface->Mode->Started) {
+    Status = BaseCodeInterface->Stop (BaseCodeInterface);
     if (EFI_ERROR (Status)) {
       StandardLib->RecordAssertion (
                      StandardLib,
@@ -2123,10 +2123,10 @@ BBTestArpConformanceAutoTest (
   //
   // Enable EFI_PXE_BASE_CODE_PROTOCOL Protocol interface in Ipv4
   //
-  if (BcInterface->Mode->Ipv6Supported == TRUE) {
-    Status = BcInterface->Start (BcInterface, TRUE);
+  if (BaseCodeInterface->Mode->Ipv6Supported == TRUE) {
+    Status = BaseCodeInterface->Start (BaseCodeInterface, TRUE);
   } else {
-    Status = BcInterface->Start (BcInterface, FALSE);
+    Status = BaseCodeInterface->Start (BaseCodeInterface, FALSE);
   }
   
   if (EFI_ERROR (Status)) {
@@ -2146,7 +2146,7 @@ BBTestArpConformanceAutoTest (
   //
   // Test EFI_INVALID_PARAMETER case 
   // 
-  Status = BcInterface->Arp(BcInterface, NULL, NULL);
+  Status = BaseCodeInterface->Arp(BaseCodeInterface, NULL, NULL);
   if (Status == EFI_INVALID_PARAMETER) {
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   } else {
@@ -2167,10 +2167,10 @@ BBTestArpConformanceAutoTest (
   //
   // if Ip6 support test EFI_UNSUPPORT case
   //
-  if (BcInterface->Mode->UsingIpv6 == TRUE) {
+  if (BaseCodeInterface->Mode->UsingIpv6 == TRUE) {
     SctZeroMem (IpAddr.v6.Addr, sizeof(IpAddr.v6.Addr));
 
-    Status = BcInterface->Arp(BcInterface, &IpAddr, NULL);
+    Status = BaseCodeInterface->Arp(BaseCodeInterface, &IpAddr, NULL);
     if (Status == EFI_UNSUPPORTED) {
       AssertionType = EFI_TEST_ASSERTION_PASSED;
     } else {
@@ -2219,7 +2219,7 @@ BBTestArpConformanceManualTest (
   EFI_TEST_LOGGING_LIBRARY_PROTOCOL     *LoggingLib;
   EFI_STATUS                            Status;
   EFI_TEST_ASSERTION                    AssertionType;
-  EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface;
   EFI_IP_ADDRESS                        IpAddr;
   EFI_MAC_ADDRESS                       MacAddr;
   EFI_INI_FILE_HANDLE                   FileHandle;
@@ -2250,10 +2250,10 @@ BBTestArpConformanceManualTest (
   //
   // Get the EFI_PXE_BASE_CODE_PROTOCOL Protocol interface to be tested
   //
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
   // Disable EFI_PXE_BASE_CODE_PROTOCOL protocol if needed
-  Status = ChangePxeState (BcInterface, FALSE, BcInterface->Mode->Started, FALSE);
+  Status = ChangePxeState (BaseCodeInterface, FALSE, BaseCodeInterface->Mode->Started, FALSE);
   if (EFI_ERROR(Status)) {
     return Status;
   }
@@ -2286,7 +2286,7 @@ BBTestArpConformanceManualTest (
   //
   // 4.9.2.1 Call Arp() while PXE Base Code Protocol Disabled
   //
-  Status = BcInterface->Arp (BcInterface, &IpAddr, &MacAddr);
+  Status = BaseCodeInterface->Arp (BaseCodeInterface, &IpAddr, &MacAddr);
   if (Status == EFI_NOT_STARTED) {
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   } else {
@@ -2321,7 +2321,7 @@ BBTestArpConformanceManualTest (
   }
 
   // Enable EFI_PXE_BASE_CODE_PROTOCOL protocol if needed
-  Status = ChangePxeState (BcInterface, FALSE, BcInterface->Mode->Started, TRUE);
+  Status = ChangePxeState (BaseCodeInterface, FALSE, BaseCodeInterface->Mode->Started, TRUE);
   if (EFI_ERROR(Status)) {
     return Status;
   }
@@ -2331,7 +2331,7 @@ BBTestArpConformanceManualTest (
   //
   SctPrint (L"\r\nPlease Setup DHCP Server\r\n");
   WaitForAnyInput ();
-  Status = BcInterface->Dhcp (BcInterface, FALSE);
+  Status = BaseCodeInterface->Dhcp (BaseCodeInterface, FALSE);
   if (EFI_ERROR(Status))
   {
     StandardLib->RecordAssertion (
@@ -2349,7 +2349,7 @@ BBTestArpConformanceManualTest (
   //
   // 4.9.2.3 Call Arp() for un-existed host
   //
-  Status = BcInterface->Arp (BcInterface, &IpAddr, &MacAddr);
+  Status = BaseCodeInterface->Arp (BaseCodeInterface, &IpAddr, &MacAddr);
   if (Status == EFI_TIMEOUT) {
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   } else {
@@ -2388,9 +2388,9 @@ BBTestArpConformanceManualTest (
   //
   // 4.9.2.4 Call Back Function abort while Arp()
   //
-  Status = HookReturnAbortCallBack (EFI_PXE_BASE_CODE_FUNCTION_ARP, BcInterface);
+  Status = HookReturnAbortCallBack (EFI_PXE_BASE_CODE_FUNCTION_ARP, BaseCodeInterface);
 
-  Status = BcInterface->Arp (BcInterface, &IpAddr, &MacAddr);
+  Status = BaseCodeInterface->Arp (BaseCodeInterface, &IpAddr, &MacAddr);
   if ((Status == EFI_ABORTED) && gCallBackInvoked) {
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   } else {
@@ -2411,7 +2411,7 @@ BBTestArpConformanceManualTest (
   //
   // Unhook the Callback function
   //
-  UnHookReturnAbortCallBack (BcInterface);
+  UnHookReturnAbortCallBack (BaseCodeInterface);
 
   return EFI_SUCCESS;
 }
@@ -2438,7 +2438,7 @@ BBTestSetParametersConformanceTest (
   EFI_STANDARD_TEST_LIBRARY_PROTOCOL    *StandardLib;
   EFI_STATUS                            Status;
   EFI_TEST_ASSERTION                    AssertionType;
-  EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface;
 
   //
   // Get the Standard Library Interface
@@ -2456,10 +2456,10 @@ BBTestSetParametersConformanceTest (
   //
   // Get the EFI_PXE_BASE_CODE_PROTOCOL Protocol interface to be tested
   //
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
   // Disable EFI_PXE_BASE_CODE_PROTOCOL protocol if needed
-  Status = ChangePxeState (BcInterface, FALSE, BcInterface->Mode->Started, FALSE);
+  Status = ChangePxeState (BaseCodeInterface, FALSE, BaseCodeInterface->Mode->Started, FALSE);
   if (EFI_ERROR(Status)) {
     return Status;
   }
@@ -2467,8 +2467,8 @@ BBTestSetParametersConformanceTest (
   //
   // 4.10.2.1 Call SetParameter() while PXE Base Code Protocol Disabled
   //
-  Status = BcInterface->SetParameters (
-                          BcInterface,
+  Status = BaseCodeInterface->SetParameters (
+                          BaseCodeInterface,
                           NULL,
                           NULL,
                           NULL,
@@ -2516,7 +2516,7 @@ BBTestSetStationIpConformanceTest (
   EFI_STANDARD_TEST_LIBRARY_PROTOCOL    *StandardLib;
   EFI_STATUS                            Status;
   EFI_TEST_ASSERTION                    AssertionType;
-  EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface;
 
   //
   // Get the Standard Library Interface
@@ -2534,10 +2534,10 @@ BBTestSetStationIpConformanceTest (
   //
   // Get the EFI_PXE_BASE_CODE_PROTOCOL Protocol interface to be tested
   //
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
   // Disable EFI_PXE_BASE_CODE_PROTOCOL protocol if needed
-  Status = ChangePxeState (BcInterface, FALSE, BcInterface->Mode->Started, FALSE);
+  Status = ChangePxeState (BaseCodeInterface, FALSE, BaseCodeInterface->Mode->Started, FALSE);
   if (EFI_ERROR(Status)) {
     return Status;
   }
@@ -2545,7 +2545,7 @@ BBTestSetStationIpConformanceTest (
   //
   // 4.11.2.1 Call SetStationIp() while PXE Base Code Protocol Disabled
   //
-  Status = BcInterface->SetStationIp (BcInterface, NULL, NULL);
+  Status = BaseCodeInterface->SetStationIp (BaseCodeInterface, NULL, NULL);
   if (Status ==  EFI_NOT_STARTED) {
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   } else {
@@ -2587,7 +2587,7 @@ BBTestSetPacketsConformanceTest (
   EFI_STANDARD_TEST_LIBRARY_PROTOCOL    *StandardLib;
   EFI_STATUS                            Status;
   EFI_TEST_ASSERTION                    AssertionType;
-  EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface;
 
   //
   // Get the Standard Library Interface
@@ -2605,10 +2605,10 @@ BBTestSetPacketsConformanceTest (
   //
   // Get the EFI_PXE_BASE_CODE_PROTOCOL Protocol interface to be tested
   //
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
   // Disable EFI_PXE_BASE_CODE_PROTOCOL protocol if needed
-  Status = ChangePxeState (BcInterface, FALSE, BcInterface->Mode->Started, FALSE);
+  Status = ChangePxeState (BaseCodeInterface, FALSE, BaseCodeInterface->Mode->Started, FALSE);
   if (EFI_ERROR(Status)) {
     return Status;
   }
@@ -2616,8 +2616,8 @@ BBTestSetPacketsConformanceTest (
   //
   // 4.12.2.1 Call SetPackets() while PXE Base Code Protocol Disabled
   //
-  Status = BcInterface->SetPackets (
-                          BcInterface,
+  Status = BaseCodeInterface->SetPackets (
+                          BaseCodeInterface,
                           NULL,
                           NULL,
                           NULL,

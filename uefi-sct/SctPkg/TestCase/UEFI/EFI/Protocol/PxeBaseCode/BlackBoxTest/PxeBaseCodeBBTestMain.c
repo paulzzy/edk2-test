@@ -442,21 +442,21 @@ ChangePxeState (
 
 EFI_STATUS
 ReInitPxeBaseCode (
-  IN EFI_PXE_BASE_CODE_PROTOCOL    *BcInterface
+  IN EFI_PXE_BASE_CODE_PROTOCOL    *BaseCodeInterface
 )
 {
   EFI_STATUS     Status;
 
   // Re-initialize the EFI_PXE_BASE_CODE_PROTOCOL
-  if (BcInterface->Mode->Started == TRUE)
+  if (BaseCodeInterface->Mode->Started == TRUE)
   {
-    Status = BcInterface->Stop (BcInterface);
+    Status = BaseCodeInterface->Stop (BaseCodeInterface);
     if (EFI_ERROR(Status)){
       return Status;
     }
   }
 
-  Status = BcInterface->Start (BcInterface, FALSE);
+  Status = BaseCodeInterface->Start (BaseCodeInterface, FALSE);
   if (EFI_ERROR(Status)){
     return Status;
   }
@@ -612,7 +612,7 @@ NewCallBack (
 EFI_STATUS
 HookReturnAbortCallBack (
   IN EFI_PXE_BASE_CODE_FUNCTION         FuncNum,
-  IN EFI_PXE_BASE_CODE_PROTOCOL         *BcInterface
+  IN EFI_PXE_BASE_CODE_PROTOCOL         *BaseCodeInterface
   )
 {
   EFI_STATUS                          Status;
@@ -645,7 +645,7 @@ HookReturnAbortCallBack (
   }
 
   //
-  // Looking for the handle corresponding to the BcInterface
+  // Looking for the handle corresponding to the BaseCodeInterface
   //
   gHandle = NULL;
   for (Index = 0; Index < HandleCount; Index += 1) {
@@ -654,7 +654,7 @@ HookReturnAbortCallBack (
                      &gBlackBoxEfiPxeBaseCodeProtocolGuid,
                      (VOID **)&Interface
                    );
-    if (BcInterface == Interface) {
+    if (BaseCodeInterface == Interface) {
       gHandle = HandleBuffer[Index];
       break;
     }
@@ -695,8 +695,8 @@ HookReturnAbortCallBack (
     // Enable PXE to use call back
     //
     NewMakeCallback = TRUE;
-    Status = BcInterface->SetParameters (
-                            BcInterface,
+    Status = BaseCodeInterface->SetParameters (
+                            BaseCodeInterface,
                             NULL,
                             NULL,
                             NULL,
@@ -718,7 +718,7 @@ HookReturnAbortCallBack (
 
 EFI_STATUS
 UnHookReturnAbortCallBack (
-  IN EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface
+  IN EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface
   )
 {
   EFI_STATUS                          Status;
@@ -742,8 +742,8 @@ UnHookReturnAbortCallBack (
     // Disable PXE to use call back
     //
     NewMakeCallback = FALSE;
-    Status = BcInterface->SetParameters (
-                            BcInterface,
+    Status = BaseCodeInterface->SetParameters (
+                            BaseCodeInterface,
                             NULL,
                             NULL,
                             NULL,

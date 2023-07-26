@@ -163,7 +163,7 @@ BBTestUdpWriteFuncThrGateway (
 
 EFI_STATUS
 BBTestUdpReadFuncBasic (
-  IN EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface,
+  IN EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface,
   IN EFI_STANDARD_TEST_LIBRARY_PROTOCOL    *StandardLib,
   IN EFI_TEST_LOGGING_LIBRARY_PROTOCOL     *LoggingLib,
   IN EFI_PXE_BASE_CODE_IP_FILTER           *OrigIpFilter
@@ -171,7 +171,7 @@ BBTestUdpReadFuncBasic (
 
 EFI_STATUS
 BBTestUdpReadFuncDesIpFilter (
-  IN EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface,
+  IN EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface,
   IN EFI_STANDARD_TEST_LIBRARY_PROTOCOL    *StandardLib,
   IN EFI_TEST_LOGGING_LIBRARY_PROTOCOL     *LoggingLib,
   IN EFI_PXE_BASE_CODE_IP_FILTER           *OrigIpFilter
@@ -179,7 +179,7 @@ BBTestUdpReadFuncDesIpFilter (
 
 EFI_STATUS
 BBTestUdpReadFuncDestPortFilter (
-  IN EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface,
+  IN EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface,
   IN EFI_STANDARD_TEST_LIBRARY_PROTOCOL    *StandardLib,
   IN EFI_TEST_LOGGING_LIBRARY_PROTOCOL     *LoggingLib,
   IN EFI_PXE_BASE_CODE_IP_FILTER           *OrigIpFilter
@@ -187,7 +187,7 @@ BBTestUdpReadFuncDestPortFilter (
 
 EFI_STATUS
 BBTestUdpReadFuncSrcIpFilter (
-  IN EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface,
+  IN EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface,
   IN EFI_STANDARD_TEST_LIBRARY_PROTOCOL    *StandardLib,
   IN EFI_TEST_LOGGING_LIBRARY_PROTOCOL     *LoggingLib,
   IN EFI_INI_FILE_HANDLE                    FileHandle,
@@ -196,7 +196,7 @@ BBTestUdpReadFuncSrcIpFilter (
 
 EFI_STATUS
 BBTestUdpReadFuncSrcPortFilter (
-  IN EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface,
+  IN EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface,
   IN EFI_STANDARD_TEST_LIBRARY_PROTOCOL    *StandardLib,
   IN EFI_TEST_LOGGING_LIBRARY_PROTOCOL     *LoggingLib,
   IN EFI_PXE_BASE_CODE_IP_FILTER           *OrigIpFilter
@@ -222,7 +222,7 @@ BBTestNewStartFunctionTest (
   EFI_STANDARD_TEST_LIBRARY_PROTOCOL    *StandardLib;
   EFI_STATUS                            Status;
   EFI_TEST_ASSERTION                    AssertionType;
-  EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface;
 
   UINT32                                Index;
   CHAR8                                 *TempPointer;
@@ -245,13 +245,13 @@ BBTestNewStartFunctionTest (
   //
   // Get the EFI_PXE_BASE_CODE_PROTOCOL Protocol interface to be tested
   //
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
   //
   // Disable EFI_PXE_BASE_CODE_PROTOCOL Protocol interface
   //
-  if (BcInterface->Mode->Started) {
-    Status = BcInterface->Stop (BcInterface);
+  if (BaseCodeInterface->Mode->Started) {
+    Status = BaseCodeInterface->Stop (BaseCodeInterface);
     if (EFI_ERROR (Status)) {
       StandardLib->RecordAssertion (
                      StandardLib,
@@ -270,7 +270,7 @@ BBTestNewStartFunctionTest (
   //
   // Enable EFI_PXE_BASE_CODE_PROTOCOL Protocol interface in Ipv4
   //
-  Status = BcInterface->Start (BcInterface, FALSE);
+  Status = BaseCodeInterface->Start (BaseCodeInterface, FALSE);
   if ((Status == EFI_SUCCESS)) {
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   } else if ((Status == EFI_DEVICE_ERROR) || (Status == EFI_OUT_OF_RESOURCES)){
@@ -292,133 +292,133 @@ BBTestNewStartFunctionTest (
 
   if (AssertionType == EFI_TEST_ASSERTION_PASSED) {
     AssertionType = EFI_TEST_ASSERTION_PASSED;
-    if (BcInterface->Mode->Started != TRUE) {
+    if (BaseCodeInterface->Mode->Started != TRUE) {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
       StandardLib->RecordMessage (
                      StandardLib,
                      EFI_VERBOSE_LEVEL_DEFAULT,
                      L"Mode->Started - %s\r\n",
-                     BcInterface->Mode->Started ? L"TRUE" : L"FALSE"
+                     BaseCodeInterface->Mode->Started ? L"TRUE" : L"FALSE"
                      );
     }
-    if (BcInterface->Mode->UsingIpv6 != FALSE) {
+    if (BaseCodeInterface->Mode->UsingIpv6 != FALSE) {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
       StandardLib->RecordMessage (
                      StandardLib,
                      EFI_VERBOSE_LEVEL_DEFAULT,
                      L"Mode->UsingIpv6 - %s\r\n",
-                     BcInterface->Mode->UsingIpv6 ? L"TRUE" : L"FALSE"
+                     BaseCodeInterface->Mode->UsingIpv6 ? L"TRUE" : L"FALSE"
                      );
     }
-    if (BcInterface->Mode->AutoArp != TRUE) {
+    if (BaseCodeInterface->Mode->AutoArp != TRUE) {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
       StandardLib->RecordMessage (
                      StandardLib,
                      EFI_VERBOSE_LEVEL_DEFAULT,
                      L"Mode->AutoArp - %s\r\n",
-                     BcInterface->Mode->AutoArp ? L"TRUE" : L"FALSE"
+                     BaseCodeInterface->Mode->AutoArp ? L"TRUE" : L"FALSE"
                      );
     }
-    if (BcInterface->Mode->SendGUID != FALSE) {
+    if (BaseCodeInterface->Mode->SendGUID != FALSE) {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
       StandardLib->RecordMessage (
                      StandardLib,
                      EFI_VERBOSE_LEVEL_DEFAULT,
                      L"Mode->SendGUID - %s\r\n",
-                     BcInterface->Mode->SendGUID ? L"TRUE" : L"FALSE"
+                     BaseCodeInterface->Mode->SendGUID ? L"TRUE" : L"FALSE"
                      );
     }
-    if (BcInterface->Mode->DhcpDiscoverValid != FALSE) {
+    if (BaseCodeInterface->Mode->DhcpDiscoverValid != FALSE) {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
       StandardLib->RecordMessage (
                      StandardLib,
                      EFI_VERBOSE_LEVEL_DEFAULT,
                      L"Mode->DhcpDiscoverValid - %s\r\n",
-                     BcInterface->Mode->DhcpDiscoverValid ? L"TRUE" : L"FALSE"
+                     BaseCodeInterface->Mode->DhcpDiscoverValid ? L"TRUE" : L"FALSE"
                      );
     }
-    if (BcInterface->Mode->DhcpAckReceived != FALSE) {
+    if (BaseCodeInterface->Mode->DhcpAckReceived != FALSE) {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
       StandardLib->RecordMessage (
                      StandardLib,
                      EFI_VERBOSE_LEVEL_DEFAULT,
                      L"Mode->DhcpAckReceived - %s\r\n",
-                     BcInterface->Mode->DhcpAckReceived ? L"TRUE" : L"FALSE"
+                     BaseCodeInterface->Mode->DhcpAckReceived ? L"TRUE" : L"FALSE"
                      );
     }
-    if (BcInterface->Mode->ProxyOfferReceived != FALSE) {
+    if (BaseCodeInterface->Mode->ProxyOfferReceived != FALSE) {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
       StandardLib->RecordMessage (
                      StandardLib,
                      EFI_VERBOSE_LEVEL_DEFAULT,
                      L"Mode->ProxyOfferReceived - %s\r\n",
-                     BcInterface->Mode->ProxyOfferReceived ? L"TRUE" : L"FALSE"
+                     BaseCodeInterface->Mode->ProxyOfferReceived ? L"TRUE" : L"FALSE"
                      );
     }
-    if (BcInterface->Mode->PxeDiscoverValid != FALSE) {
+    if (BaseCodeInterface->Mode->PxeDiscoverValid != FALSE) {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
       StandardLib->RecordMessage (
                      StandardLib,
                      EFI_VERBOSE_LEVEL_DEFAULT,
                      L"Mode->PxeDiscoverValid - %s\r\n",
-                     BcInterface->Mode->PxeDiscoverValid ? L"TRUE" : L"FALSE"
+                     BaseCodeInterface->Mode->PxeDiscoverValid ? L"TRUE" : L"FALSE"
                      );
     }
-    if (BcInterface->Mode->PxeReplyReceived != FALSE) {
+    if (BaseCodeInterface->Mode->PxeReplyReceived != FALSE) {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
       StandardLib->RecordMessage (
                      StandardLib,
                      EFI_VERBOSE_LEVEL_DEFAULT,
                      L"Mode->PxeReplyReceived - %s\r\n",
-                     BcInterface->Mode->PxeReplyReceived ? L"TRUE" : L"FALSE"
+                     BaseCodeInterface->Mode->PxeReplyReceived ? L"TRUE" : L"FALSE"
                      );
     }
-    if (BcInterface->Mode->PxeBisReplyReceived != FALSE) {
+    if (BaseCodeInterface->Mode->PxeBisReplyReceived != FALSE) {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
       StandardLib->RecordMessage (
                      StandardLib,
                      EFI_VERBOSE_LEVEL_DEFAULT,
                      L"Mode->PxeBisReplyReceived - %s\r\n",
-                     BcInterface->Mode->PxeBisReplyReceived ? L"TRUE" : L"FALSE"
+                     BaseCodeInterface->Mode->PxeBisReplyReceived ? L"TRUE" : L"FALSE"
                      );
     }
-    if (BcInterface->Mode->IcmpErrorReceived != FALSE) {
+    if (BaseCodeInterface->Mode->IcmpErrorReceived != FALSE) {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
       StandardLib->RecordMessage (
                      StandardLib,
                      EFI_VERBOSE_LEVEL_DEFAULT,
                      L"Mode->IcmpErrorReceived - %s\r\n",
-                     BcInterface->Mode->IcmpErrorReceived ? L"TRUE" : L"FALSE"
+                     BaseCodeInterface->Mode->IcmpErrorReceived ? L"TRUE" : L"FALSE"
                      );
     }
-    if (BcInterface->Mode->TftpErrorReceived != FALSE) {
+    if (BaseCodeInterface->Mode->TftpErrorReceived != FALSE) {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
       StandardLib->RecordMessage (
                      StandardLib,
                      EFI_VERBOSE_LEVEL_DEFAULT,
                      L"Mode->TftpErrorReceived - %s\r\n",
-                     BcInterface->Mode->TftpErrorReceived ? L"TRUE" : L"FALSE"
+                     BaseCodeInterface->Mode->TftpErrorReceived ? L"TRUE" : L"FALSE"
                      );
     }
-    if (BcInterface->Mode->TTL != DEFAULT_TTL) {
+    if (BaseCodeInterface->Mode->TTL != DEFAULT_TTL) {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
       StandardLib->RecordMessage (
                      StandardLib,
                      EFI_VERBOSE_LEVEL_DEFAULT,
                      L"Mode->TTL - %d\r\n",
-                     BcInterface->Mode->TTL
+                     BaseCodeInterface->Mode->TTL
                      );
     }
-    if (BcInterface->Mode->ToS != DEFAULT_ToS) {
+    if (BaseCodeInterface->Mode->ToS != DEFAULT_ToS) {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
       StandardLib->RecordMessage (
                      StandardLib,
                      EFI_VERBOSE_LEVEL_DEFAULT,
                      L"Mode->ToS - %d\r\n",
-                     BcInterface->Mode->ToS
+                     BaseCodeInterface->Mode->ToS
                      );
     }
-    if (IS_IP_ADDRESS_ZEROED(&BcInterface->Mode->StationIp) == FALSE) {
+    if (IS_IP_ADDRESS_ZEROED(&BaseCodeInterface->Mode->StationIp) == FALSE) {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
       StandardLib->RecordMessage (
                      StandardLib,
@@ -426,7 +426,7 @@ BBTestNewStartFunctionTest (
                      L"IS_IP_ADDRESS_ZEROED(Mode->StationIp) - Fail\r\n"
                      );
     }
-    if (IS_IP_ADDRESS_ZEROED(&BcInterface->Mode->SubnetMask) == FALSE) {
+    if (IS_IP_ADDRESS_ZEROED(&BaseCodeInterface->Mode->SubnetMask) == FALSE) {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
       StandardLib->RecordMessage (
                      StandardLib,
@@ -434,7 +434,7 @@ BBTestNewStartFunctionTest (
                      L"IS_IP_ADDRESS_ZEROED(Mode->SubnetMask) - Fail\r\n"
                      );
     }
-    if (IS_PXE_PACKET_ZEROED(&BcInterface->Mode->DhcpDiscover) == FALSE) {
+    if (IS_PXE_PACKET_ZEROED(&BaseCodeInterface->Mode->DhcpDiscover) == FALSE) {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
       StandardLib->RecordMessage (
                      StandardLib,
@@ -442,7 +442,7 @@ BBTestNewStartFunctionTest (
                      L"IS_PXE_PACKET_ZEROED(Mode->DhcpDiscover) - Fail\r\n"
                      );
     }
-    if (IS_PXE_PACKET_ZEROED(&BcInterface->Mode->DhcpAck) == FALSE) {
+    if (IS_PXE_PACKET_ZEROED(&BaseCodeInterface->Mode->DhcpAck) == FALSE) {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
       StandardLib->RecordMessage (
                      StandardLib,
@@ -450,7 +450,7 @@ BBTestNewStartFunctionTest (
                      L"IS_PXE_PACKET_ZEROED(Mode->DhcpAck) - Fail\r\n"
                      );
     }
-    if (IS_PXE_PACKET_ZEROED(&BcInterface->Mode->ProxyOffer) == FALSE) {
+    if (IS_PXE_PACKET_ZEROED(&BaseCodeInterface->Mode->ProxyOffer) == FALSE) {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
       StandardLib->RecordMessage (
                      StandardLib,
@@ -459,7 +459,7 @@ BBTestNewStartFunctionTest (
                      );
     }
 
-    if (IS_PXE_PACKET_ZEROED(&BcInterface->Mode->PxeDiscover) == FALSE) {
+    if (IS_PXE_PACKET_ZEROED(&BaseCodeInterface->Mode->PxeDiscover) == FALSE) {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
       StandardLib->RecordMessage (
                      StandardLib,
@@ -467,7 +467,7 @@ BBTestNewStartFunctionTest (
                      L"IS_PXE_PACKET_ZEROED(Mode->PxeDiscover) - Fail\r\n"
                      );
     }
-    if (IS_PXE_PACKET_ZEROED(&BcInterface->Mode->PxeReply) == FALSE) {
+    if (IS_PXE_PACKET_ZEROED(&BaseCodeInterface->Mode->PxeReply) == FALSE) {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
       StandardLib->RecordMessage (
                      StandardLib,
@@ -475,7 +475,7 @@ BBTestNewStartFunctionTest (
                      L"IS_PXE_PACKET_ZEROED(Mode->PxeReply) - Fail\r\n"
                      );
     }
-    if (IS_PXE_PACKET_ZEROED(&BcInterface->Mode->PxeBisReply) == FALSE) {
+    if (IS_PXE_PACKET_ZEROED(&BaseCodeInterface->Mode->PxeBisReply) == FALSE) {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
       StandardLib->RecordMessage (
                      StandardLib,
@@ -483,7 +483,7 @@ BBTestNewStartFunctionTest (
                      L"IS_PXE_PACKET_ZEROED(Mode->PxeBisReply) - Fail\r\n"
                      );
     }
-    if ((0 != BcInterface->Mode->IpFilter.Filters) || (0 != BcInterface->Mode->IpFilter.IpCnt)) {
+    if ((0 != BaseCodeInterface->Mode->IpFilter.Filters) || (0 != BaseCodeInterface->Mode->IpFilter.IpCnt)) {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
       StandardLib->RecordMessage (
                      StandardLib,
@@ -491,17 +491,17 @@ BBTestNewStartFunctionTest (
                      L"The Mode->IpFilter.Filters or Mode->IpFilter.IpCnt field is not 0\r\n"
                      );
     }
-    if (BcInterface->Mode->ArpCacheEntries != 0) {
+    if (BaseCodeInterface->Mode->ArpCacheEntries != 0) {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
       StandardLib->RecordMessage (
                      StandardLib,
                      EFI_VERBOSE_LEVEL_DEFAULT,
                      L"Mode->ArpCacheEntries - %d\r\n",
-                     BcInterface->Mode->ArpCacheEntries
+                     BaseCodeInterface->Mode->ArpCacheEntries
                      );
     }
-    if (BcInterface->Mode->ArpCache != NULL) {
-      TempPointer = (CHAR8 *) BcInterface->Mode->ArpCache;
+    if (BaseCodeInterface->Mode->ArpCache != NULL) {
+      TempPointer = (CHAR8 *) BaseCodeInterface->Mode->ArpCache;
       for (Index = 0; Index < sizeof (EFI_PXE_BASE_CODE_ARP_ENTRY) * EFI_PXE_BASE_CODE_MAX_ARP_ENTRIES; Index ++ ) {
         if (*TempPointer != 0) {
           AssertionType = EFI_TEST_ASSERTION_FAILED;
@@ -509,33 +509,33 @@ BBTestNewStartFunctionTest (
                          StandardLib,
                          EFI_VERBOSE_LEVEL_DEFAULT,
                          L"Mode->ArpCache- %d\r\n",
-                         BcInterface->Mode->ArpCache
+                         BaseCodeInterface->Mode->ArpCache
                          );
           break;
         }
         TempPointer++;
       }
     }
-    if (BcInterface->Mode->ArpCache == NULL) {
+    if (BaseCodeInterface->Mode->ArpCache == NULL) {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
       StandardLib->RecordMessage (
                      StandardLib,
                      EFI_VERBOSE_LEVEL_DEFAULT,
                      L"Mode->ArpCache- %d\r\n",
-                     BcInterface->Mode->ArpCache
+                     BaseCodeInterface->Mode->ArpCache
                      );
     }
-    if (BcInterface->Mode->RouteTableEntries != 0) {
+    if (BaseCodeInterface->Mode->RouteTableEntries != 0) {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
       StandardLib->RecordMessage (
                      StandardLib,
                      EFI_VERBOSE_LEVEL_DEFAULT,
                      L"Mode->RouteTableEntries - %d\r\n",
-                     BcInterface->Mode->RouteTableEntries
+                     BaseCodeInterface->Mode->RouteTableEntries
                      );
     }
-    if (BcInterface->Mode->RouteTable != NULL) {
-      TempPointer = (CHAR8 *) BcInterface->Mode->RouteTable;
+    if (BaseCodeInterface->Mode->RouteTable != NULL) {
+      TempPointer = (CHAR8 *) BaseCodeInterface->Mode->RouteTable;
       for (Index = 0; Index < sizeof (EFI_PXE_BASE_CODE_ROUTE_ENTRY) * EFI_PXE_BASE_CODE_MAX_ROUTE_ENTRIES; Index ++ ) {
         if (*TempPointer != 0) {
           AssertionType = EFI_TEST_ASSERTION_FAILED;
@@ -543,23 +543,23 @@ BBTestNewStartFunctionTest (
                          StandardLib,
                          EFI_VERBOSE_LEVEL_DEFAULT,
                          L"Mode->RouteTable- %d\r\n",
-                         BcInterface->Mode->RouteTable
+                         BaseCodeInterface->Mode->RouteTable
                          );
           break;
         }
         TempPointer++;
       }
     }
-    if (BcInterface->Mode->RouteTable == NULL) {
+    if (BaseCodeInterface->Mode->RouteTable == NULL) {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
       StandardLib->RecordMessage (
                      StandardLib,
                      EFI_VERBOSE_LEVEL_DEFAULT,
                      L"Mode->RouteTable- %d\r\n",
-                     BcInterface->Mode->RouteTable
+                     BaseCodeInterface->Mode->RouteTable
                      );
     }
-    if (IS_ICMP_ERROR_ZEROED(&BcInterface->Mode->IcmpError) == FALSE) {
+    if (IS_ICMP_ERROR_ZEROED(&BaseCodeInterface->Mode->IcmpError) == FALSE) {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
       StandardLib->RecordMessage (
                      StandardLib,
@@ -567,7 +567,7 @@ BBTestNewStartFunctionTest (
                      L"IS_ICMP_ERROR_ZEROED(Mode->IcmpError) - Fail\r\n"
                      );
     }
-    if (IS_TFTP_ERROR_ZEROED(&BcInterface->Mode->TftpError) == FALSE) {
+    if (IS_TFTP_ERROR_ZEROED(&BaseCodeInterface->Mode->TftpError) == FALSE) {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
       StandardLib->RecordMessage (
                      StandardLib,
@@ -586,12 +586,12 @@ BBTestNewStartFunctionTest (
                    );
   }
 
-  if (BcInterface->Mode->Ipv6Available && BcInterface->Mode->Ipv6Supported) {
+  if (BaseCodeInterface->Mode->Ipv6Available && BaseCodeInterface->Mode->Ipv6Supported) {
     //
     // Disable EFI_PXE_BASE_CODE_PROTOCOL Protocol interface
     //
-    if (BcInterface->Mode->Started) {
-      Status = BcInterface->Stop (BcInterface);
+    if (BaseCodeInterface->Mode->Started) {
+      Status = BaseCodeInterface->Stop (BaseCodeInterface);
       if (EFI_ERROR (Status)) {
         StandardLib->RecordAssertion (
                        StandardLib,
@@ -610,7 +610,7 @@ BBTestNewStartFunctionTest (
     //
     // Enable EFI_PXE_BASE_CODE_PROTOCOL Protocol interface in IPv6
     //
-    Status = BcInterface->Start (BcInterface, TRUE);
+    Status = BaseCodeInterface->Start (BaseCodeInterface, TRUE);
     if ((Status == EFI_SUCCESS)) {
       AssertionType = EFI_TEST_ASSERTION_PASSED;
     } else if ((Status == EFI_DEVICE_ERROR) || (Status == EFI_OUT_OF_RESOURCES)){
@@ -632,133 +632,133 @@ BBTestNewStartFunctionTest (
 
     if (AssertionType == EFI_TEST_ASSERTION_PASSED) {
       AssertionType = EFI_TEST_ASSERTION_PASSED;
-      if (BcInterface->Mode->Started != TRUE) {
+      if (BaseCodeInterface->Mode->Started != TRUE) {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
         StandardLib->RecordMessage (
                        StandardLib,
                        EFI_VERBOSE_LEVEL_DEFAULT,
                        L"Mode->Started - %s\r\n",
-                       BcInterface->Mode->Started ? L"TRUE" : L"FALSE"
+                       BaseCodeInterface->Mode->Started ? L"TRUE" : L"FALSE"
                        );
       }
-      if (BcInterface->Mode->UsingIpv6 != TRUE) {
+      if (BaseCodeInterface->Mode->UsingIpv6 != TRUE) {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
         StandardLib->RecordMessage (
                        StandardLib,
                        EFI_VERBOSE_LEVEL_DEFAULT,
                        L"Mode->UsingIpv6 - %s\r\n",
-                       BcInterface->Mode->UsingIpv6 ? L"TRUE" : L"FALSE"
+                       BaseCodeInterface->Mode->UsingIpv6 ? L"TRUE" : L"FALSE"
                        );
       }
-      if (BcInterface->Mode->AutoArp != TRUE) {
+      if (BaseCodeInterface->Mode->AutoArp != TRUE) {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
         StandardLib->RecordMessage (
                        StandardLib,
                        EFI_VERBOSE_LEVEL_DEFAULT,
                        L"Mode->AutoArp - %s\r\n",
-                       BcInterface->Mode->AutoArp ? L"TRUE" : L"FALSE"
+                       BaseCodeInterface->Mode->AutoArp ? L"TRUE" : L"FALSE"
                        );
       }
-      if (BcInterface->Mode->SendGUID != FALSE) {
+      if (BaseCodeInterface->Mode->SendGUID != FALSE) {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
         StandardLib->RecordMessage (
                        StandardLib,
                        EFI_VERBOSE_LEVEL_DEFAULT,
                        L"Mode->SendGUID - %s\r\n",
-                       BcInterface->Mode->SendGUID ? L"TRUE" : L"FALSE"
+                       BaseCodeInterface->Mode->SendGUID ? L"TRUE" : L"FALSE"
                        );
       }
-      if (BcInterface->Mode->DhcpDiscoverValid != FALSE) {
+      if (BaseCodeInterface->Mode->DhcpDiscoverValid != FALSE) {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
         StandardLib->RecordMessage (
                        StandardLib,
                        EFI_VERBOSE_LEVEL_DEFAULT,
                        L"Mode->DhcpDiscoverValid - %s\r\n",
-                       BcInterface->Mode->DhcpDiscoverValid ? L"TRUE" : L"FALSE"
+                       BaseCodeInterface->Mode->DhcpDiscoverValid ? L"TRUE" : L"FALSE"
                        );
       }
-      if (BcInterface->Mode->DhcpAckReceived != FALSE) {
+      if (BaseCodeInterface->Mode->DhcpAckReceived != FALSE) {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
         StandardLib->RecordMessage (
                        StandardLib,
                        EFI_VERBOSE_LEVEL_DEFAULT,
                        L"Mode->DhcpAckReceived - %s\r\n",
-                       BcInterface->Mode->DhcpAckReceived ? L"TRUE" : L"FALSE"
+                       BaseCodeInterface->Mode->DhcpAckReceived ? L"TRUE" : L"FALSE"
                        );
       }
-      if (BcInterface->Mode->ProxyOfferReceived != FALSE) {
+      if (BaseCodeInterface->Mode->ProxyOfferReceived != FALSE) {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
         StandardLib->RecordMessage (
                        StandardLib,
                        EFI_VERBOSE_LEVEL_DEFAULT,
                        L"Mode->ProxyOfferReceived - %s\r\n",
-                       BcInterface->Mode->ProxyOfferReceived ? L"TRUE" : L"FALSE"
+                       BaseCodeInterface->Mode->ProxyOfferReceived ? L"TRUE" : L"FALSE"
                        );
       }
-      if (BcInterface->Mode->PxeDiscoverValid != FALSE) {
+      if (BaseCodeInterface->Mode->PxeDiscoverValid != FALSE) {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
         StandardLib->RecordMessage (
                        StandardLib,
                        EFI_VERBOSE_LEVEL_DEFAULT,
                        L"Mode->PxeDiscoverValid - %s\r\n",
-                       BcInterface->Mode->PxeDiscoverValid ? L"TRUE" : L"FALSE"
+                       BaseCodeInterface->Mode->PxeDiscoverValid ? L"TRUE" : L"FALSE"
                        );
       }
-      if (BcInterface->Mode->PxeReplyReceived != FALSE) {
+      if (BaseCodeInterface->Mode->PxeReplyReceived != FALSE) {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
         StandardLib->RecordMessage (
                        StandardLib,
                        EFI_VERBOSE_LEVEL_DEFAULT,
                        L"Mode->PxeReplyReceived - %s\r\n",
-                       BcInterface->Mode->PxeReplyReceived ? L"TRUE" : L"FALSE"
+                       BaseCodeInterface->Mode->PxeReplyReceived ? L"TRUE" : L"FALSE"
                        );
       }
-      if (BcInterface->Mode->PxeBisReplyReceived != FALSE) {
+      if (BaseCodeInterface->Mode->PxeBisReplyReceived != FALSE) {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
         StandardLib->RecordMessage (
                        StandardLib,
                        EFI_VERBOSE_LEVEL_DEFAULT,
                        L"Mode->PxeBisReplyReceived - %s\r\n",
-                       BcInterface->Mode->PxeBisReplyReceived ? L"TRUE" : L"FALSE"
+                       BaseCodeInterface->Mode->PxeBisReplyReceived ? L"TRUE" : L"FALSE"
                        );
       }
-      if (BcInterface->Mode->IcmpErrorReceived != FALSE) {
+      if (BaseCodeInterface->Mode->IcmpErrorReceived != FALSE) {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
         StandardLib->RecordMessage (
                        StandardLib,
                        EFI_VERBOSE_LEVEL_DEFAULT,
                        L"Mode->IcmpErrorReceived - %s\r\n",
-                       BcInterface->Mode->IcmpErrorReceived ? L"TRUE" : L"FALSE"
+                       BaseCodeInterface->Mode->IcmpErrorReceived ? L"TRUE" : L"FALSE"
                        );
       }
-      if (BcInterface->Mode->TftpErrorReceived != FALSE) {
+      if (BaseCodeInterface->Mode->TftpErrorReceived != FALSE) {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
         StandardLib->RecordMessage (
                        StandardLib,
                        EFI_VERBOSE_LEVEL_DEFAULT,
                        L"Mode->TftpErrorReceived - %s\r\n",
-                       BcInterface->Mode->TftpErrorReceived ? L"TRUE" : L"FALSE"
+                       BaseCodeInterface->Mode->TftpErrorReceived ? L"TRUE" : L"FALSE"
                        );
       }
-      if (BcInterface->Mode->TTL != DEFAULT_TTL) {
+      if (BaseCodeInterface->Mode->TTL != DEFAULT_TTL) {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
         StandardLib->RecordMessage (
                        StandardLib,
                        EFI_VERBOSE_LEVEL_DEFAULT,
                        L"Mode->TTL - %d\r\n",
-                       BcInterface->Mode->TTL
+                       BaseCodeInterface->Mode->TTL
                        );
       }
-      if (BcInterface->Mode->ToS != DEFAULT_ToS) {
+      if (BaseCodeInterface->Mode->ToS != DEFAULT_ToS) {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
         StandardLib->RecordMessage (
                        StandardLib,
                        EFI_VERBOSE_LEVEL_DEFAULT,
                        L"Mode->ToS - %d\r\n",
-                       BcInterface->Mode->ToS
+                       BaseCodeInterface->Mode->ToS
                        );
       }
-      if (IS_IP_ADDRESS_ZEROED(&BcInterface->Mode->StationIp) == FALSE) {
+      if (IS_IP_ADDRESS_ZEROED(&BaseCodeInterface->Mode->StationIp) == FALSE) {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
         StandardLib->RecordMessage (
                        StandardLib,
@@ -766,7 +766,7 @@ BBTestNewStartFunctionTest (
                        L"IS_IP_ADDRESS_ZEROED(Mode->StationIp) - Fail\r\n"
                        );
       }
-      if (IS_IP_ADDRESS_ZEROED(&BcInterface->Mode->SubnetMask) == FALSE) {
+      if (IS_IP_ADDRESS_ZEROED(&BaseCodeInterface->Mode->SubnetMask) == FALSE) {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
         StandardLib->RecordMessage (
                        StandardLib,
@@ -774,7 +774,7 @@ BBTestNewStartFunctionTest (
                        L"IS_IP_ADDRESS_ZEROED(Mode->SubnetMask) - Fail\r\n"
                        );
       }
-      if (IS_PXE_PACKET_ZEROED(&BcInterface->Mode->DhcpDiscover) == FALSE) {
+      if (IS_PXE_PACKET_ZEROED(&BaseCodeInterface->Mode->DhcpDiscover) == FALSE) {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
         StandardLib->RecordMessage (
                        StandardLib,
@@ -782,7 +782,7 @@ BBTestNewStartFunctionTest (
                        L"IS_PXE_PACKET_ZEROED(Mode->DhcpDiscover) - Fail\r\n"
                        );
       }
-      if (IS_PXE_PACKET_ZEROED(&BcInterface->Mode->DhcpAck) == FALSE) {
+      if (IS_PXE_PACKET_ZEROED(&BaseCodeInterface->Mode->DhcpAck) == FALSE) {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
         StandardLib->RecordMessage (
                        StandardLib,
@@ -790,7 +790,7 @@ BBTestNewStartFunctionTest (
                        L"IS_PXE_PACKET_ZEROED(Mode->DhcpAck) - Fail\r\n"
                        );
       }
-      if (IS_PXE_PACKET_ZEROED(&BcInterface->Mode->ProxyOffer) == FALSE) {
+      if (IS_PXE_PACKET_ZEROED(&BaseCodeInterface->Mode->ProxyOffer) == FALSE) {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
         StandardLib->RecordMessage (
                        StandardLib,
@@ -799,7 +799,7 @@ BBTestNewStartFunctionTest (
                        );
       }
 
-      if (IS_PXE_PACKET_ZEROED(&BcInterface->Mode->PxeDiscover) == FALSE) {
+      if (IS_PXE_PACKET_ZEROED(&BaseCodeInterface->Mode->PxeDiscover) == FALSE) {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
         StandardLib->RecordMessage (
                        StandardLib,
@@ -807,7 +807,7 @@ BBTestNewStartFunctionTest (
                        L"IS_PXE_PACKET_ZEROED(Mode->PxeDiscover) - Fail\r\n"
                        );
       }
-      if (IS_PXE_PACKET_ZEROED(&BcInterface->Mode->PxeReply) == FALSE) {
+      if (IS_PXE_PACKET_ZEROED(&BaseCodeInterface->Mode->PxeReply) == FALSE) {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
         StandardLib->RecordMessage (
                        StandardLib,
@@ -815,7 +815,7 @@ BBTestNewStartFunctionTest (
                        L"IS_PXE_PACKET_ZEROED(Mode->PxeReply) - Fail\r\n"
                        );
       }
-      if (IS_PXE_PACKET_ZEROED(&BcInterface->Mode->PxeBisReply) == FALSE) {
+      if (IS_PXE_PACKET_ZEROED(&BaseCodeInterface->Mode->PxeBisReply) == FALSE) {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
         StandardLib->RecordMessage (
                        StandardLib,
@@ -823,7 +823,7 @@ BBTestNewStartFunctionTest (
                        L"IS_PXE_PACKET_ZEROED(Mode->PxeBisReply) - Fail\r\n"
                        );
       }
-      if ((0 != BcInterface->Mode->IpFilter.Filters) || (0 != BcInterface->Mode->IpFilter.IpCnt)) {
+      if ((0 != BaseCodeInterface->Mode->IpFilter.Filters) || (0 != BaseCodeInterface->Mode->IpFilter.IpCnt)) {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
         StandardLib->RecordMessage (
                        StandardLib,
@@ -831,17 +831,17 @@ BBTestNewStartFunctionTest (
                        L"The Mode->IpFilter.Filters or Mode->IpFilter.IpCnt field is not 0\r\n"
                        );
       }
-      if (BcInterface->Mode->ArpCacheEntries != 0) {
+      if (BaseCodeInterface->Mode->ArpCacheEntries != 0) {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
         StandardLib->RecordMessage (
                        StandardLib,
                        EFI_VERBOSE_LEVEL_DEFAULT,
                        L"Mode->ArpCacheEntries - %d\r\n",
-                       BcInterface->Mode->ArpCacheEntries
+                       BaseCodeInterface->Mode->ArpCacheEntries
                        );
       }
-      if (BcInterface->Mode->ArpCache != NULL) {
-        TempPointer = (CHAR8 *) BcInterface->Mode->ArpCache;
+      if (BaseCodeInterface->Mode->ArpCache != NULL) {
+        TempPointer = (CHAR8 *) BaseCodeInterface->Mode->ArpCache;
         for (Index = 0; Index < sizeof (EFI_PXE_BASE_CODE_ARP_ENTRY) * EFI_PXE_BASE_CODE_MAX_ARP_ENTRIES; Index ++ ) {
           if (*TempPointer != 0) {
             AssertionType = EFI_TEST_ASSERTION_FAILED;
@@ -849,33 +849,33 @@ BBTestNewStartFunctionTest (
                            StandardLib,
                            EFI_VERBOSE_LEVEL_DEFAULT,
                            L"Mode->ArpCache- %d\r\n",
-                           BcInterface->Mode->ArpCache
+                           BaseCodeInterface->Mode->ArpCache
                            );
             break;
           }
           TempPointer++;
         }
       }
-      if (BcInterface->Mode->ArpCache == NULL) {
+      if (BaseCodeInterface->Mode->ArpCache == NULL) {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
         StandardLib->RecordMessage (
                        StandardLib,
                        EFI_VERBOSE_LEVEL_DEFAULT,
                        L"Mode->ArpCache- %d\r\n",
-                       BcInterface->Mode->ArpCache
+                       BaseCodeInterface->Mode->ArpCache
                        );
       }
-      if (BcInterface->Mode->RouteTableEntries != 0) {
+      if (BaseCodeInterface->Mode->RouteTableEntries != 0) {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
         StandardLib->RecordMessage (
                        StandardLib,
                        EFI_VERBOSE_LEVEL_DEFAULT,
                        L"Mode->RouteTableEntries - %d\r\n",
-                       BcInterface->Mode->RouteTableEntries
+                       BaseCodeInterface->Mode->RouteTableEntries
                        );
       }
-      if (BcInterface->Mode->RouteTable != NULL) {
-        TempPointer = (CHAR8 *) BcInterface->Mode->RouteTable;
+      if (BaseCodeInterface->Mode->RouteTable != NULL) {
+        TempPointer = (CHAR8 *) BaseCodeInterface->Mode->RouteTable;
         for (Index = 0; Index < sizeof (EFI_PXE_BASE_CODE_ROUTE_ENTRY) * EFI_PXE_BASE_CODE_MAX_ROUTE_ENTRIES; Index ++ ) {
           if (*TempPointer != 0) {
             AssertionType = EFI_TEST_ASSERTION_FAILED;
@@ -883,23 +883,23 @@ BBTestNewStartFunctionTest (
                            StandardLib,
                            EFI_VERBOSE_LEVEL_DEFAULT,
                            L"Mode->RouteTable- %d\r\n",
-                           BcInterface->Mode->RouteTable
+                           BaseCodeInterface->Mode->RouteTable
                            );
             break;
           }
           TempPointer++;
         }
       }
-      if (BcInterface->Mode->RouteTable == NULL) {
+      if (BaseCodeInterface->Mode->RouteTable == NULL) {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
         StandardLib->RecordMessage (
                        StandardLib,
                        EFI_VERBOSE_LEVEL_DEFAULT,
                        L"Mode->RouteTable- %d\r\n",
-                       BcInterface->Mode->RouteTable
+                       BaseCodeInterface->Mode->RouteTable
                        );
       }
-      if (IS_ICMP_ERROR_ZEROED(&BcInterface->Mode->IcmpError) == FALSE) {
+      if (IS_ICMP_ERROR_ZEROED(&BaseCodeInterface->Mode->IcmpError) == FALSE) {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
         StandardLib->RecordMessage (
                        StandardLib,
@@ -907,7 +907,7 @@ BBTestNewStartFunctionTest (
                        L"IS_ICMP_ERROR_ZEROED(Mode->IcmpError) - Fail\r\n"
                        );
       }
-      if (IS_TFTP_ERROR_ZEROED(&BcInterface->Mode->TftpError) == FALSE) {
+      if (IS_TFTP_ERROR_ZEROED(&BaseCodeInterface->Mode->TftpError) == FALSE) {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
         StandardLib->RecordMessage (
                        StandardLib,
@@ -930,8 +930,8 @@ BBTestNewStartFunctionTest (
   //
   // Disable EFI_PXE_BASE_CODE_PROTOCOL Protocol interface
   //
-  if (BcInterface->Mode->Started) {
-    Status = BcInterface->Stop (BcInterface);
+  if (BaseCodeInterface->Mode->Started) {
+    Status = BaseCodeInterface->Stop (BaseCodeInterface);
     if (EFI_ERROR (Status)) {
       StandardLib->RecordAssertion (
                      StandardLib,
@@ -970,7 +970,7 @@ BBTestNewSetIpFilterFunctionTest (
   EFI_TEST_LOGGING_LIBRARY_PROTOCOL     *LoggingLib;
   EFI_STATUS                             Status;
   EFI_TEST_ASSERTION                     AssertionType;
-  EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface;
   EFI_PXE_BASE_CODE_IP_FILTER            BcIpFilter;
   UINT8                                  Index;
 
@@ -993,13 +993,13 @@ BBTestNewSetIpFilterFunctionTest (
   //
   // Get the EFI_PXE_BASE_CODE_PROTOCOL Protocol interface to be tested
   //
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
   //
   // Disable EFI_PXE_BASE_CODE_PROTOCOL Protocol interface
   //
-  if (BcInterface->Mode->Started) {
-    Status = BcInterface->Stop (BcInterface);
+  if (BaseCodeInterface->Mode->Started) {
+    Status = BaseCodeInterface->Stop (BaseCodeInterface);
     if (EFI_ERROR (Status)) {
       StandardLib->RecordAssertion (
                      StandardLib,
@@ -1018,7 +1018,7 @@ BBTestNewSetIpFilterFunctionTest (
   //
   // Enable EFI_PXE_BASE_CODE_PROTOCOL Protocol interface in IPv4
   //
-  Status = BcInterface->Start (BcInterface, FALSE);
+  Status = BaseCodeInterface->Start (BaseCodeInterface, FALSE);
   if (EFI_ERROR (Status)) {
     StandardLib->RecordAssertion (
                    StandardLib,
@@ -1039,7 +1039,7 @@ BBTestNewSetIpFilterFunctionTest (
   SetIpAddress ((EFI_IP_ADDRESS *)&(BcIpFilter.IpList[0]), 0x12345678);
   SetIpAddress ((EFI_IP_ADDRESS *)&(BcIpFilter.IpList[1]), 0x87654321);
 
-  Status = BcInterface->SetIpFilter (BcInterface, &BcIpFilter);
+  Status = BaseCodeInterface->SetIpFilter (BaseCodeInterface, &BcIpFilter);
   if (Status == EFI_SUCCESS) {
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   } else {
@@ -1056,7 +1056,7 @@ BBTestNewSetIpFilterFunctionTest (
                  Status
                  );
 
-  if (TRUE == IsIpFilterEqual (&BcIpFilter, &(BcInterface->Mode->IpFilter))){
+  if (TRUE == IsIpFilterEqual (&BcIpFilter, &(BaseCodeInterface->Mode->IpFilter))){
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   } else {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
@@ -1072,12 +1072,12 @@ BBTestNewSetIpFilterFunctionTest (
                  Status
                  );
 
-  if (BcInterface->Mode->Ipv6Supported && BcInterface->Mode->Ipv6Available) {
+  if (BaseCodeInterface->Mode->Ipv6Supported && BaseCodeInterface->Mode->Ipv6Available) {
     //
     // Disable EFI_PXE_BASE_CODE_PROTOCOL Protocol interface
     //
-    if (BcInterface->Mode->Started) {
-      Status = BcInterface->Stop (BcInterface);
+    if (BaseCodeInterface->Mode->Started) {
+      Status = BaseCodeInterface->Stop (BaseCodeInterface);
       if (EFI_ERROR (Status)) {
         StandardLib->RecordAssertion (
                        StandardLib,
@@ -1096,7 +1096,7 @@ BBTestNewSetIpFilterFunctionTest (
     //
     // Enable EFI_PXE_BASE_CODE_PROTOCOL Protocol interface in IPv6
     //
-    Status = BcInterface->Start (BcInterface, TRUE);
+    Status = BaseCodeInterface->Start (BaseCodeInterface, TRUE);
     if (EFI_ERROR (Status)) {
       StandardLib->RecordAssertion (
                      StandardLib,
@@ -1120,7 +1120,7 @@ BBTestNewSetIpFilterFunctionTest (
       BcIpFilter.IpList[1].v6.Addr[Index] = 16 - Index;
     }
 
-    Status = BcInterface->SetIpFilter (BcInterface, &BcIpFilter);
+    Status = BaseCodeInterface->SetIpFilter (BaseCodeInterface, &BcIpFilter);
     if (Status == EFI_SUCCESS) {
       AssertionType = EFI_TEST_ASSERTION_PASSED;
     } else {
@@ -1137,7 +1137,7 @@ BBTestNewSetIpFilterFunctionTest (
                    Status
                    );
 
-    if (TRUE == IsIpFilterEqual (&BcIpFilter, &(BcInterface->Mode->IpFilter))){
+    if (TRUE == IsIpFilterEqual (&BcIpFilter, &(BaseCodeInterface->Mode->IpFilter))){
       AssertionType = EFI_TEST_ASSERTION_PASSED;
     } else {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
@@ -1177,7 +1177,7 @@ BBTestNewStopFunctionTest (
   EFI_STANDARD_TEST_LIBRARY_PROTOCOL    *StandardLib;
   EFI_STATUS                            Status;
   EFI_TEST_ASSERTION                    AssertionType;
-  EFI_PXE_BASE_CODE_PROTOCOL           *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL           *BaseCodeInterface;
 
   //
   // Get the Standard Library Interface
@@ -1195,13 +1195,13 @@ BBTestNewStopFunctionTest (
   //
   // Get the EFI_PXE_BASE_CODE_PROTOCOL Protocol interface to be tested
   //
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
   //
   // Disable EFI_PXE_BASE_CODE_PROTOCOL Protocol interface
   //
-  if (BcInterface->Mode->Started) {
-    Status = BcInterface->Stop (BcInterface);
+  if (BaseCodeInterface->Mode->Started) {
+    Status = BaseCodeInterface->Stop (BaseCodeInterface);
     if (EFI_ERROR (Status)) {
       StandardLib->RecordAssertion (
                      StandardLib,
@@ -1217,11 +1217,11 @@ BBTestNewStopFunctionTest (
     }
   }
 
-  if (BcInterface->Mode->Ipv6Supported && BcInterface->Mode->Ipv6Available) {
+  if (BaseCodeInterface->Mode->Ipv6Supported && BaseCodeInterface->Mode->Ipv6Available) {
     //
     // Enable EFI_PXE_BASE_CODE_PROTOCOL Protocol interface in Ipv6
     //
-    Status = BcInterface->Start (BcInterface, TRUE);
+    Status = BaseCodeInterface->Start (BaseCodeInterface, TRUE);
     if (EFI_ERROR (Status)) {
       StandardLib->RecordAssertion (
                      StandardLib,
@@ -1238,8 +1238,8 @@ BBTestNewStopFunctionTest (
     //
     // Disable EFI_PXE_BASE_CODE_PROTOCOL Protocol interface
     //
-    Status = BcInterface->Stop (BcInterface);
-    if ((Status == EFI_SUCCESS) && !BcInterface ->Mode->Started) {
+    Status = BaseCodeInterface->Stop (BaseCodeInterface);
+    if ((Status == EFI_SUCCESS) && !BaseCodeInterface ->Mode->Started) {
       AssertionType = EFI_TEST_ASSERTION_PASSED;
     } else {
       AssertionType = EFI_TEST_ASSERTION_FAILED;
@@ -1259,7 +1259,7 @@ BBTestNewStopFunctionTest (
   //
   // Enable EFI_PXE_BASE_CODE_PROTOCOL Protocol interface in Ipv4
   //
-  Status = BcInterface->Start (BcInterface, FALSE);
+  Status = BaseCodeInterface->Start (BaseCodeInterface, FALSE);
   if (EFI_ERROR (Status)) {
     StandardLib->RecordAssertion (
                    StandardLib,
@@ -1276,8 +1276,8 @@ BBTestNewStopFunctionTest (
   //
   // Disable EFI_PXE_BASE_CODE_PROTOCOL Protocol interface
   //
-  Status = BcInterface->Stop (BcInterface);
-  if ((Status == EFI_SUCCESS) && !BcInterface ->Mode->Started) {
+  Status = BaseCodeInterface->Stop (BaseCodeInterface);
+  if ((Status == EFI_SUCCESS) && !BaseCodeInterface ->Mode->Started) {
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   } else {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
@@ -1318,7 +1318,7 @@ BBTestStartFunctionTest (
   EFI_STANDARD_TEST_LIBRARY_PROTOCOL    *StandardLib;
   EFI_STATUS                            Status;
   EFI_TEST_ASSERTION                    AssertionType;
-  EFI_PXE_BASE_CODE_PROTOCOL           *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL           *BaseCodeInterface;
 
   //
   // Get the Standard Library Interface
@@ -1336,9 +1336,9 @@ BBTestStartFunctionTest (
   //
   // Get the EFI_PXE_BASE_CODE_PROTOCOL Protocol interface to be tested
   //
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
-  Status = ChangePxeState (BcInterface, FALSE, BcInterface->Mode->Started, FALSE);
+  Status = ChangePxeState (BaseCodeInterface, FALSE, BaseCodeInterface->Mode->Started, FALSE);
   if (EFI_ERROR(Status)) {
     StandardLib->RecordAssertion (
                    StandardLib,
@@ -1353,7 +1353,7 @@ BBTestStartFunctionTest (
     return Status;
   }
 
-  Status = BcInterface->Start (BcInterface, FALSE);
+  Status = BaseCodeInterface->Start (BaseCodeInterface, FALSE);
   if ((Status == EFI_SUCCESS)) {
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   } else {
@@ -1391,151 +1391,151 @@ BBTestStartFunctionTest (
   // definition also.
   //
   AssertionType = EFI_TEST_ASSERTION_PASSED;
-  if  (BcInterface->Mode->Started != TRUE) {
+  if  (BaseCodeInterface->Mode->Started != TRUE) {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
     StandardLib->RecordMessage (
                    StandardLib,
                    EFI_VERBOSE_LEVEL_DEFAULT,
                    L"Mode->Started - %s\r\n",
-                   BcInterface->Mode->Started ? L"TRUE" : L"FALSE"
+                   BaseCodeInterface->Mode->Started ? L"TRUE" : L"FALSE"
                    );
   }
-  if  (BcInterface->Mode->UsingIpv6 != FALSE) {
+  if  (BaseCodeInterface->Mode->UsingIpv6 != FALSE) {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
     StandardLib->RecordMessage (
                    StandardLib,
                    EFI_VERBOSE_LEVEL_DEFAULT,
                    L"Mode->UsingIpv6 - %s\r\n",
-                   BcInterface->Mode->UsingIpv6 ? L"TRUE" : L"FALSE"
+                   BaseCodeInterface->Mode->UsingIpv6 ? L"TRUE" : L"FALSE"
                    );
   }
-  if  (BcInterface->Mode->AutoArp != TRUE) {
+  if  (BaseCodeInterface->Mode->AutoArp != TRUE) {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
     StandardLib->RecordMessage (
                    StandardLib,
                    EFI_VERBOSE_LEVEL_DEFAULT,
                    L"Mode->AutoArp - %s\r\n",
-                   BcInterface->Mode->AutoArp ? L"TRUE" : L"FALSE"
+                   BaseCodeInterface->Mode->AutoArp ? L"TRUE" : L"FALSE"
                    );
   }
-  if  (BcInterface->Mode->SendGUID != FALSE) {
+  if  (BaseCodeInterface->Mode->SendGUID != FALSE) {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
     StandardLib->RecordMessage (
                    StandardLib,
                    EFI_VERBOSE_LEVEL_DEFAULT,
                    L"Mode->SendGUID - %s\r\n",
-                   BcInterface->Mode->SendGUID ? L"TRUE" : L"FALSE"
+                   BaseCodeInterface->Mode->SendGUID ? L"TRUE" : L"FALSE"
                    );
   }
-  if  (BcInterface->Mode->DhcpDiscoverValid != FALSE) {
+  if  (BaseCodeInterface->Mode->DhcpDiscoverValid != FALSE) {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
     StandardLib->RecordMessage (
                    StandardLib,
                    EFI_VERBOSE_LEVEL_DEFAULT,
                    L"Mode->DhcpDiscoverValid - %s\r\n",
-                   BcInterface->Mode->DhcpDiscoverValid ? L"TRUE" : L"FALSE"
+                   BaseCodeInterface->Mode->DhcpDiscoverValid ? L"TRUE" : L"FALSE"
                    );
   }
-  if  (BcInterface->Mode->DhcpAckReceived != FALSE) {
+  if  (BaseCodeInterface->Mode->DhcpAckReceived != FALSE) {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
     StandardLib->RecordMessage (
                    StandardLib,
                    EFI_VERBOSE_LEVEL_DEFAULT,
                    L"Mode->DhcpAckReceived - %s\r\n",
-                   BcInterface->Mode->DhcpAckReceived ? L"TRUE" : L"FALSE"
+                   BaseCodeInterface->Mode->DhcpAckReceived ? L"TRUE" : L"FALSE"
                    );
   }
-  if  (BcInterface->Mode->ProxyOfferReceived != FALSE) {
+  if  (BaseCodeInterface->Mode->ProxyOfferReceived != FALSE) {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
     StandardLib->RecordMessage (
                    StandardLib,
                    EFI_VERBOSE_LEVEL_DEFAULT,
                    L"Mode->ProxyOfferReceived - %s\r\n",
-                   BcInterface->Mode->ProxyOfferReceived ? L"TRUE" : L"FALSE"
+                   BaseCodeInterface->Mode->ProxyOfferReceived ? L"TRUE" : L"FALSE"
                    );
   }
-  if  (BcInterface->Mode->PxeDiscoverValid != FALSE) {
+  if  (BaseCodeInterface->Mode->PxeDiscoverValid != FALSE) {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
     StandardLib->RecordMessage (
                    StandardLib,
                    EFI_VERBOSE_LEVEL_DEFAULT,
                    L"Mode->PxeDiscoverValid - %s\r\n",
-                   BcInterface->Mode->PxeDiscoverValid ? L"TRUE" : L"FALSE"
+                   BaseCodeInterface->Mode->PxeDiscoverValid ? L"TRUE" : L"FALSE"
                    );
   }
-  if  (BcInterface->Mode->PxeReplyReceived != FALSE) {
+  if  (BaseCodeInterface->Mode->PxeReplyReceived != FALSE) {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
     StandardLib->RecordMessage (
                    StandardLib,
                    EFI_VERBOSE_LEVEL_DEFAULT,
                    L"Mode->PxeReplyReceived - %s\r\n",
-                   BcInterface->Mode->PxeReplyReceived ? L"TRUE" : L"FALSE"
+                   BaseCodeInterface->Mode->PxeReplyReceived ? L"TRUE" : L"FALSE"
                    );
   }
-  if  (BcInterface->Mode->PxeBisReplyReceived != FALSE) {
+  if  (BaseCodeInterface->Mode->PxeBisReplyReceived != FALSE) {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
     StandardLib->RecordMessage (
                    StandardLib,
                    EFI_VERBOSE_LEVEL_DEFAULT,
                    L"Mode->PxeBisReplyReceived - %s\r\n",
-                   BcInterface->Mode->PxeBisReplyReceived ? L"TRUE" : L"FALSE"
+                   BaseCodeInterface->Mode->PxeBisReplyReceived ? L"TRUE" : L"FALSE"
                    );
   }
-  if  (BcInterface->Mode->IcmpErrorReceived != FALSE) {
+  if  (BaseCodeInterface->Mode->IcmpErrorReceived != FALSE) {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
     StandardLib->RecordMessage (
                    StandardLib,
                    EFI_VERBOSE_LEVEL_DEFAULT,
                    L"Mode->PxeBisReplyReceived - %s\r\n",
-                   BcInterface->Mode->PxeBisReplyReceived ? L"TRUE" : L"FALSE"
+                   BaseCodeInterface->Mode->PxeBisReplyReceived ? L"TRUE" : L"FALSE"
                    );
   }
-  if  (BcInterface->Mode->TftpErrorReceived != FALSE) {
+  if  (BaseCodeInterface->Mode->TftpErrorReceived != FALSE) {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
     StandardLib->RecordMessage (
                    StandardLib,
                    EFI_VERBOSE_LEVEL_DEFAULT,
                    L"Mode->PxeBisReplyReceived - %s\r\n",
-                   BcInterface->Mode->PxeBisReplyReceived ? L"TRUE" : L"FALSE"
+                   BaseCodeInterface->Mode->PxeBisReplyReceived ? L"TRUE" : L"FALSE"
                    );
   }
-  if  (BcInterface->Mode->TTL != DEFAULT_TTL) {
+  if  (BaseCodeInterface->Mode->TTL != DEFAULT_TTL) {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
     StandardLib->RecordMessage (
                    StandardLib,
                    EFI_VERBOSE_LEVEL_DEFAULT,
                    L"Mode->TTL - %d\r\n",
-                   BcInterface->Mode->TTL
+                   BaseCodeInterface->Mode->TTL
                    );
   }
-  if  (BcInterface->Mode->ToS != DEFAULT_ToS) {
+  if  (BaseCodeInterface->Mode->ToS != DEFAULT_ToS) {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
     StandardLib->RecordMessage (
                    StandardLib,
                    EFI_VERBOSE_LEVEL_DEFAULT,
                    L"Mode->ToS - %d\r\n",
-                   BcInterface->Mode->ToS
+                   BaseCodeInterface->Mode->ToS
                    );
   }
-  if  (BcInterface->Mode->ArpCacheEntries != 0) {
+  if  (BaseCodeInterface->Mode->ArpCacheEntries != 0) {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
     StandardLib->RecordMessage (
                    StandardLib,
                    EFI_VERBOSE_LEVEL_DEFAULT,
                    L"Mode->ArpCacheEntries - %d\r\n",
-                   BcInterface->Mode->ArpCacheEntries
+                   BaseCodeInterface->Mode->ArpCacheEntries
                    );
   }
-  if  (BcInterface->Mode->RouteTableEntries != 0) {
+  if  (BaseCodeInterface->Mode->RouteTableEntries != 0) {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
     StandardLib->RecordMessage (
                    StandardLib,
                    EFI_VERBOSE_LEVEL_DEFAULT,
                    L"Mode->RouteTableEntries - %d\r\n",
-                   BcInterface->Mode->RouteTableEntries
+                   BaseCodeInterface->Mode->RouteTableEntries
                    );
   }
-  if  (IS_IP_ADDRESS_ZEROED(&BcInterface->Mode->StationIp) == FALSE) {
+  if  (IS_IP_ADDRESS_ZEROED(&BaseCodeInterface->Mode->StationIp) == FALSE) {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
     StandardLib->RecordMessage (
                    StandardLib,
@@ -1543,7 +1543,7 @@ BBTestStartFunctionTest (
                    L"IS_IP_ADDRESS_ZEROED(Mode->StationIp) - Fail\r\n"
                    );
   }
-  if  (IS_IP_ADDRESS_ZEROED(&BcInterface->Mode->SubnetMask) == FALSE) {
+  if  (IS_IP_ADDRESS_ZEROED(&BaseCodeInterface->Mode->SubnetMask) == FALSE) {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
     StandardLib->RecordMessage (
                    StandardLib,
@@ -1551,7 +1551,7 @@ BBTestStartFunctionTest (
                    L"IS_IP_ADDRESS_ZEROED(Mode->SubnetMask) - Fail\r\n"
                    );
   }
-  if  (IS_PXE_PACKET_ZEROED(&BcInterface->Mode->DhcpDiscover) == FALSE) {
+  if  (IS_PXE_PACKET_ZEROED(&BaseCodeInterface->Mode->DhcpDiscover) == FALSE) {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
     StandardLib->RecordMessage (
                    StandardLib,
@@ -1559,7 +1559,7 @@ BBTestStartFunctionTest (
                    L"IS_PXE_PACKET_ZEROED(Mode->DhcpDiscover) - Fail\r\n"
                    );
   }
-  if  (IS_PXE_PACKET_ZEROED(&BcInterface->Mode->DhcpAck) == FALSE) {
+  if  (IS_PXE_PACKET_ZEROED(&BaseCodeInterface->Mode->DhcpAck) == FALSE) {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
     StandardLib->RecordMessage (
                    StandardLib,
@@ -1567,7 +1567,7 @@ BBTestStartFunctionTest (
                    L"IS_PXE_PACKET_ZEROED(Mode->DhcpAck) - Fail\r\n"
                    );
   }
-  if  (IS_PXE_PACKET_ZEROED(&BcInterface->Mode->ProxyOffer) == FALSE) {
+  if  (IS_PXE_PACKET_ZEROED(&BaseCodeInterface->Mode->ProxyOffer) == FALSE) {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
     StandardLib->RecordMessage (
                    StandardLib,
@@ -1575,7 +1575,7 @@ BBTestStartFunctionTest (
                    L"IS_PXE_PACKET_ZEROED(Mode->ProxyOffer) - Fail\r\n"
                    );
   }
-  if  (IS_PXE_PACKET_ZEROED(&BcInterface->Mode->PxeDiscover) == FALSE) {
+  if  (IS_PXE_PACKET_ZEROED(&BaseCodeInterface->Mode->PxeDiscover) == FALSE) {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
     StandardLib->RecordMessage (
                    StandardLib,
@@ -1583,7 +1583,7 @@ BBTestStartFunctionTest (
                    L"IS_PXE_PACKET_ZEROED(Mode->PxeDiscover) - Fail\r\n"
                    );
   }
-  if  (IS_PXE_PACKET_ZEROED(&BcInterface->Mode->PxeReply) == FALSE) {
+  if  (IS_PXE_PACKET_ZEROED(&BaseCodeInterface->Mode->PxeReply) == FALSE) {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
     StandardLib->RecordMessage (
                    StandardLib,
@@ -1591,7 +1591,7 @@ BBTestStartFunctionTest (
                    L"IS_PXE_PACKET_ZEROED(Mode->PxeReply) - Fail\r\n"
                    );
   }
-  if  (IS_ICMP_ERROR_ZEROED(&BcInterface->Mode->IcmpError) == FALSE) {
+  if  (IS_ICMP_ERROR_ZEROED(&BaseCodeInterface->Mode->IcmpError) == FALSE) {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
     StandardLib->RecordMessage (
                    StandardLib,
@@ -1599,7 +1599,7 @@ BBTestStartFunctionTest (
                    L"IS_ICMP_ERROR_ZEROED(Mode->IcmpError) - Fail\r\n"
                    );
   }
-  if  (IS_TFTP_ERROR_ZEROED(&BcInterface->Mode->TftpError) == FALSE) {
+  if  (IS_TFTP_ERROR_ZEROED(&BaseCodeInterface->Mode->TftpError) == FALSE) {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
     StandardLib->RecordMessage (
                    StandardLib,
@@ -1607,7 +1607,7 @@ BBTestStartFunctionTest (
                    L"IS_TFTP_ERROR_ZEROED(Mode->TftpError) - Fail\r\n"
                    );
   }
-  if  ((0 != BcInterface->Mode->IpFilter.Filters) || (0 != BcInterface->Mode->IpFilter.IpCnt)) {
+  if  ((0 != BaseCodeInterface->Mode->IpFilter.Filters) || (0 != BaseCodeInterface->Mode->IpFilter.IpCnt)) {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
     StandardLib->RecordMessage (
                    StandardLib,
@@ -1625,7 +1625,7 @@ BBTestStartFunctionTest (
                  (UINTN)__LINE__
                  );
 
-  Status = ChangePxeState (BcInterface, FALSE, BcInterface->Mode->Started, FALSE);
+  Status = ChangePxeState (BaseCodeInterface, FALSE, BaseCodeInterface->Mode->Started, FALSE);
   if (EFI_ERROR(Status)) {
     StandardLib->RecordAssertion (
                    StandardLib,
@@ -1643,8 +1643,8 @@ BBTestStartFunctionTest (
   //
   // If IPV6 is not supported, check the return status with IpV6
   //
-  if (!BcInterface->Mode->Ipv6Supported) {
-    Status = BcInterface->Start (BcInterface, TRUE);
+  if (!BaseCodeInterface->Mode->Ipv6Supported) {
+    Status = BaseCodeInterface->Start (BaseCodeInterface, TRUE);
     if (Status == EFI_UNSUPPORTED) {
       AssertionType = EFI_TEST_ASSERTION_PASSED;
     } else {
@@ -1687,7 +1687,7 @@ BBTestStopFunctionTest (
   EFI_STANDARD_TEST_LIBRARY_PROTOCOL    *StandardLib;
   EFI_STATUS                            Status;
   EFI_TEST_ASSERTION                    AssertionType;
-  EFI_PXE_BASE_CODE_PROTOCOL           *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL           *BaseCodeInterface;
 
   //
   // Get the Standard Library Interface
@@ -1705,19 +1705,19 @@ BBTestStopFunctionTest (
   //
   // Get the EFI_PXE_BASE_CODE_PROTOCOL Protocol interface to be tested
   //
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
   //
   // Enable EFI_PXE_BASE_CODE_PROTOCOL if needed
   //
-  Status = ChangePxeState (BcInterface, FALSE, BcInterface->Mode->Started, TRUE);
+  Status = ChangePxeState (BaseCodeInterface, FALSE, BaseCodeInterface->Mode->Started, TRUE);
   if (EFI_ERROR(Status)) {
     return Status;
   }
 
-  Status = BcInterface->Stop (BcInterface);
+  Status = BaseCodeInterface->Stop (BaseCodeInterface);
 
-  if ((Status == EFI_SUCCESS) && (BcInterface ->Mode->Started == FALSE)) {
+  if ((Status == EFI_SUCCESS) && (BaseCodeInterface ->Mode->Started == FALSE)) {
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   } else {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
@@ -1759,7 +1759,7 @@ BBTestDhcpFunctionTest (
   EFI_TEST_LOGGING_LIBRARY_PROTOCOL     *LoggingLib;
   EFI_STATUS                            Status;
   EFI_TEST_ASSERTION                    AssertionType;
-  EFI_PXE_BASE_CODE_PROTOCOL           *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL           *BaseCodeInterface;
   BOOLEAN                               ret;
 
   //
@@ -1788,10 +1788,10 @@ BBTestDhcpFunctionTest (
   //
   // Get the EFI_PXE_BASE_CODE_PROTOCOL Protocol interface to be tested
   //
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
   // Enable EFI_PXE_BASE_CODE_PROTOCOL if needed
-  Status = ChangePxeState (BcInterface, FALSE, BcInterface->Mode->Started, TRUE);
+  Status = ChangePxeState (BaseCodeInterface, FALSE, BaseCodeInterface->Mode->Started, TRUE);
   if (EFI_ERROR(Status)) {
     return Status;
   }
@@ -1800,8 +1800,8 @@ BBTestDhcpFunctionTest (
   SctPrint (L"\r\nConfigure and Start DHCP Server\r\n");
   WaitForAnyInput ();
 
-  Status = BcInterface->Dhcp (
-                          BcInterface,
+  Status = BaseCodeInterface->Dhcp (
+                          BaseCodeInterface,
                           FALSE
                           );
 
@@ -1822,11 +1822,11 @@ BBTestDhcpFunctionTest (
                  );
 
   // Check other field in Mode
-  if ((BcInterface->Mode->DhcpDiscoverValid == FALSE)                     ||
-      (IsPxePacketValid(EFI_PXE_PACKET_TYPE_DHCP_DISCOVER, &BcInterface->Mode->DhcpDiscover) == FALSE) ||
-      (BcInterface->Mode->DhcpAckReceived == FALSE)                       ||
-      (IsPxePacketValid (EFI_PXE_PACKET_TYPE_DHCP_ACK, &BcInterface->Mode->DhcpAck) == FALSE) ||
-      (BcInterface->Mode->ProxyOfferReceived == TRUE && (IsPxePacketValid (EFI_PXE_PACKET_TYPE_PROXY_OFFER, &BcInterface->Mode->ProxyOffer) == FALSE)))
+  if ((BaseCodeInterface->Mode->DhcpDiscoverValid == FALSE)                     ||
+      (IsPxePacketValid(EFI_PXE_PACKET_TYPE_DHCP_DISCOVER, &BaseCodeInterface->Mode->DhcpDiscover) == FALSE) ||
+      (BaseCodeInterface->Mode->DhcpAckReceived == FALSE)                       ||
+      (IsPxePacketValid (EFI_PXE_PACKET_TYPE_DHCP_ACK, &BaseCodeInterface->Mode->DhcpAck) == FALSE) ||
+      (BaseCodeInterface->Mode->ProxyOfferReceived == TRUE && (IsPxePacketValid (EFI_PXE_PACKET_TYPE_PROXY_OFFER, &BaseCodeInterface->Mode->ProxyOffer) == FALSE)))
   {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
   } else {
@@ -1842,10 +1842,10 @@ BBTestDhcpFunctionTest (
                    (UINTN)__LINE__
                    );
   LOG_CHAR16_ASCII_DFLT1(StandardLib, L"abcdefghijklmnopqrst");
-  PrintPxePacket (LoggingLib, L"DHCP Discover", &BcInterface->Mode->DhcpDiscover);
-  PrintPxePacket (LoggingLib, L"DHCP ACK", &BcInterface->Mode->DhcpAck);
-  if (BcInterface->Mode->ProxyOfferReceived==TRUE)
-        PrintPxePacket (LoggingLib, L"Proxy Offer", &BcInterface->Mode->ProxyOffer);
+  PrintPxePacket (LoggingLib, L"DHCP Discover", &BaseCodeInterface->Mode->DhcpDiscover);
+  PrintPxePacket (LoggingLib, L"DHCP ACK", &BaseCodeInterface->Mode->DhcpAck);
+  if (BaseCodeInterface->Mode->ProxyOfferReceived==TRUE)
+        PrintPxePacket (LoggingLib, L"Proxy Offer", &BaseCodeInterface->Mode->ProxyOffer);
 
   SctPrint (L"\r\nPlease Check if the DHCP Packets correct?");
   ret = WaitForUserCheck ();
@@ -1892,7 +1892,7 @@ BBTestDiscoverFunctionTest (
   EFI_TEST_LOGGING_LIBRARY_PROTOCOL     *LoggingLib;
   EFI_STATUS                            Status;
   EFI_TEST_ASSERTION                    AssertionType;
-  EFI_PXE_BASE_CODE_PROTOCOL           *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL           *BaseCodeInterface;
   UINT16                                Layer;
 
   //
@@ -1921,9 +1921,9 @@ BBTestDiscoverFunctionTest (
   //
   // Get the EFI_PXE_BASE_CODE_PROTOCOL Protocol interface to be tested
   //
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
-  Status = ReInitPxeBaseCode (BcInterface);
+  Status = ReInitPxeBaseCode (BaseCodeInterface);
   if (EFI_ERROR(Status))
   {
     StandardLib->RecordMessage (
@@ -1937,7 +1937,7 @@ BBTestDiscoverFunctionTest (
   // Call Dhcp() to initialize DhcpAck & ProxyOffer field
   SctPrint (L"\r\nPlease Setup DHCP Server\r\n");
   WaitForAnyInput ();
-  Status = BcInterface->Dhcp (BcInterface, FALSE);
+  Status = BaseCodeInterface->Dhcp (BaseCodeInterface, FALSE);
   if (EFI_ERROR(Status))
   {
     StandardLib->RecordMessage (
@@ -1949,8 +1949,8 @@ BBTestDiscoverFunctionTest (
   }
 
   Layer = 0;
-  Status = BcInterface->Discover (
-                          BcInterface,
+  Status = BaseCodeInterface->Discover (
+                          BaseCodeInterface,
                           EFI_PXE_BASE_CODE_BOOT_TYPE_BOOTSTRAP,
                           &Layer,
                           FALSE,
@@ -1973,18 +1973,18 @@ BBTestDiscoverFunctionTest (
                  );
 
   // check other field
-    if (BcInterface->Mode->PxeDiscoverValid == FALSE ||
-      IsPxePacketValid (EFI_PXE_PACKET_TYPE_PXE_DISCOVER, &BcInterface->Mode->PxeDiscover) == FALSE||
-      BcInterface->Mode->PxeReplyReceived == FALSE ||
-      IsPxePacketValid (EFI_PXE_PACKET_TYPE_PXE_OFFER, &BcInterface->Mode->PxeReply) == FALSE
+    if (BaseCodeInterface->Mode->PxeDiscoverValid == FALSE ||
+      IsPxePacketValid (EFI_PXE_PACKET_TYPE_PXE_DISCOVER, &BaseCodeInterface->Mode->PxeDiscover) == FALSE||
+      BaseCodeInterface->Mode->PxeReplyReceived == FALSE ||
+      IsPxePacketValid (EFI_PXE_PACKET_TYPE_PXE_OFFER, &BaseCodeInterface->Mode->PxeReply) == FALSE
       )
      {
         AssertionType = EFI_TEST_ASSERTION_FAILED;
      }
      else
      {
-       PrintPxePacket (LoggingLib, L"PXE Discover", &BcInterface->Mode->PxeDiscover);
-       PrintPxePacket (LoggingLib, L"PXE Reply", &BcInterface->Mode->PxeReply);
+       PrintPxePacket (LoggingLib, L"PXE Discover", &BaseCodeInterface->Mode->PxeDiscover);
+       PrintPxePacket (LoggingLib, L"PXE Reply", &BaseCodeInterface->Mode->PxeReply);
        if (TRUE == WaitForUserCheck ()) {
          AssertionType = EFI_TEST_ASSERTION_PASSED;
        } else {
@@ -2030,7 +2030,7 @@ BBTestMtftpFunctionTest (
   EFI_TEST_LOGGING_LIBRARY_PROTOCOL     *LoggingLib;
   EFI_INI_FILE_HANDLE                    FileHandle;
   EFI_STATUS                             Status;
-  EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface;
   EFI_SIMPLE_NETWORK_PROTOCOL           *SnpInterface;
   UINTN                                  FileSize;
   EFI_TEST_ASSERTION                     AssertionType;
@@ -2068,10 +2068,10 @@ BBTestMtftpFunctionTest (
   //
   // Get the EFI_PXE_BASE_CODE_PROTOCOL Protocol interface to be tested
   //
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
   // Enable EFI_PXE_BASE_CODE_PROTOCOL protocol if needed
-  Status = ChangePxeState (BcInterface, FALSE, BcInterface->Mode->Started, TRUE);
+  Status = ChangePxeState (BaseCodeInterface, FALSE, BaseCodeInterface->Mode->Started, TRUE);
   if (EFI_ERROR(Status)) {
     return Status;
   }
@@ -2126,7 +2126,7 @@ BBTestMtftpFunctionTest (
   //
   SctPrint (L"\r\nSetup DHCP Server\r\n");
   WaitForAnyInput ();
-  Status = BcInterface->Dhcp (BcInterface, FALSE);
+  Status = BaseCodeInterface->Dhcp (BaseCodeInterface, FALSE);
   if (EFI_ERROR(Status))
   {
     StandardLib->RecordAssertion (
@@ -2141,48 +2141,48 @@ BBTestMtftpFunctionTest (
                    );
   }
 
-  LOG_BUF_HEX_DFLT (LoggingLib, (CHAR16*)&BcInterface->Mode->StationIp, sizeof (EFI_IP_ADDRESS)/2);
+  LOG_BUF_HEX_DFLT (LoggingLib, (CHAR16*)&BaseCodeInterface->Mode->StationIp, sizeof (EFI_IP_ADDRESS)/2);
 
 
   //
   // Test TFTP Get File Size
   //
-  Status = BBTestTftpGetFileSize (BcInterface, StandardLib, ProfileLib, LoggingLib, FileHandle, &FileSize);
+  Status = BBTestTftpGetFileSize (BaseCodeInterface, StandardLib, ProfileLib, LoggingLib, FileHandle, &FileSize);
   //
   // Test TFTP Read File
   //
   if (EFI_SUCCESS == Status) {
-    BBTestTftpReadFile (BcInterface, StandardLib, ProfileLib, LoggingLib, FileHandle, FileSize);
+    BBTestTftpReadFile (BaseCodeInterface, StandardLib, ProfileLib, LoggingLib, FileHandle, FileSize);
   } else {
-    BBTestTftpReadFile (BcInterface, StandardLib, ProfileLib, LoggingLib, FileHandle, MAX_FILE_SIZE);
+    BBTestTftpReadFile (BaseCodeInterface, StandardLib, ProfileLib, LoggingLib, FileHandle, MAX_FILE_SIZE);
   }
 
   //
   // Test TFTP Read Directory
   //
-  BBTestTftpReadDirectory (BcInterface, StandardLib, ProfileLib, LoggingLib, FileHandle, MAX_DIRECTORY_SIZE);
+  BBTestTftpReadDirectory (BaseCodeInterface, StandardLib, ProfileLib, LoggingLib, FileHandle, MAX_DIRECTORY_SIZE);
 
   //
   // Test TFTP Write File
   //
-  BBTestTftpWriteFile      (BcInterface, StandardLib, ProfileLib, LoggingLib, FileHandle);
+  BBTestTftpWriteFile      (BaseCodeInterface, StandardLib, ProfileLib, LoggingLib, FileHandle);
 
   //
   // Test MTFTP Get File Size
   //
-  Status = BBTestMtftpGetFileSize (BcInterface, StandardLib, ProfileLib, LoggingLib, FileHandle, &FileSize);
+  Status = BBTestMtftpGetFileSize (BaseCodeInterface, StandardLib, ProfileLib, LoggingLib, FileHandle, &FileSize);
 
   //
   // Test MTFTP Read File
   //
   if (EFI_SUCCESS == Status)
   {
-    BBTestMtftpReadFile (BcInterface, StandardLib, ProfileLib, LoggingLib, FileHandle, FileSize);
+    BBTestMtftpReadFile (BaseCodeInterface, StandardLib, ProfileLib, LoggingLib, FileHandle, FileSize);
   }
   //
   // Test MTFTP Read Directory
   //
-  BBTestMtftpReadDirectory (BcInterface, StandardLib, ProfileLib, LoggingLib, FileHandle, MAX_DIRECTORY_SIZE);
+  BBTestMtftpReadDirectory (BaseCodeInterface, StandardLib, ProfileLib, LoggingLib, FileHandle, MAX_DIRECTORY_SIZE);
 
   return CloseTestIniFile (ProfileLib, FileHandle);
 }
@@ -2211,7 +2211,7 @@ BBTestUdpWriteFunctionTest (
   EFI_TEST_LOGGING_LIBRARY_PROTOCOL     *LoggingLib;
   EFI_INI_FILE_HANDLE                    FileHandle;
   EFI_STATUS                             Status;
-  EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface;
   EFI_SIMPLE_NETWORK_PROTOCOL           *SnpInterface;
   EFI_TEST_ASSERTION                     AssertionType;
 
@@ -2259,12 +2259,12 @@ BBTestUdpWriteFunctionTest (
   //
   // Get the EFI_PXE_BASE_CODE_PROTOCOL Protocol interface to be tested
   //
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
   //
   // Enable EFI_PXE_BASE_CODE_PROTOCOL if needed
   //
-  Status = ChangePxeState (BcInterface, FALSE, BcInterface->Mode->Started, TRUE);
+  Status = ChangePxeState (BaseCodeInterface, FALSE, BaseCodeInterface->Mode->Started, TRUE);
   if (EFI_ERROR(Status)) {
     StandardLib->RecordAssertion (
                    StandardLib,
@@ -2329,7 +2329,7 @@ BBTestUdpWriteFunctionTest (
   //
   SctPrint (L"\r\nSetup DHCP Server\r\n");
   WaitForAnyInput ();
-  Status = BcInterface->Dhcp (BcInterface, FALSE);
+  Status = BaseCodeInterface->Dhcp (BaseCodeInterface, FALSE);
   if (EFI_ERROR(Status))
   {
     StandardLib->RecordAssertion (
@@ -2344,19 +2344,19 @@ BBTestUdpWriteFunctionTest (
                    );
   }
 
-  LOG_BUF_HEX_DFLT (LoggingLib, (CHAR16*)&BcInterface->Mode->StationIp, sizeof (EFI_IP_ADDRESS)/2);
+  LOG_BUF_HEX_DFLT (LoggingLib, (CHAR16*)&BaseCodeInterface->Mode->StationIp, sizeof (EFI_IP_ADDRESS)/2);
 
   // 4.6.4.1 Basic Function (no fragmentation)
-  BBTestUdpWriteFuncBasic (BcInterface, StandardLib, ProfileLib, LoggingLib, FileHandle);
+  BBTestUdpWriteFuncBasic (BaseCodeInterface, StandardLib, ProfileLib, LoggingLib, FileHandle);
 
   // 4.6.4.2 Basic Function (with fragmentation)
-  BBTestUdpWriteFuncFrag (BcInterface, StandardLib, ProfileLib, LoggingLib, FileHandle);
+  BBTestUdpWriteFuncFrag (BaseCodeInterface, StandardLib, ProfileLib, LoggingLib, FileHandle);
 
   // 4.6.4.3 Prepend Header (with fragmentation)
-  BBTestUdpWriteFuncPrependHeader (BcInterface, StandardLib, ProfileLib, LoggingLib, FileHandle);
+  BBTestUdpWriteFuncPrependHeader (BaseCodeInterface, StandardLib, ProfileLib, LoggingLib, FileHandle);
 
   // 4.6.4.3 Through Gateway
-  BBTestUdpWriteFuncThrGateway (BcInterface, StandardLib, ProfileLib, LoggingLib, FileHandle);
+  BBTestUdpWriteFuncThrGateway (BaseCodeInterface, StandardLib, ProfileLib, LoggingLib, FileHandle);
 
   return CloseTestIniFile (ProfileLib, FileHandle);
 }
@@ -2385,7 +2385,7 @@ BBTestUdpReadFunctionTest (
   EFI_TEST_LOGGING_LIBRARY_PROTOCOL     *LoggingLib;
   EFI_INI_FILE_HANDLE                    FileHandle;
   EFI_STATUS                             Status;
-  EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface;
   EFI_PXE_BASE_CODE_IP_FILTER            BcIpFilter;
   EFI_SIMPLE_NETWORK_PROTOCOL           *SnpInterface;
   EFI_TEST_ASSERTION                     AssertionType;
@@ -2416,10 +2416,10 @@ BBTestUdpReadFunctionTest (
   //
   // Get the EFI_PXE_BASE_CODE_PROTOCOL Protocol interface to be tested
   //
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
   // Re - initialize EFI_PXE_BASE_CODE_PROTOCOL
-  Status = ReInitPxeBaseCode (BcInterface);
+  Status = ReInitPxeBaseCode (BaseCodeInterface);
   if (EFI_ERROR(Status)){
     StandardLib->RecordAssertion (
                    StandardLib,
@@ -2445,7 +2445,7 @@ BBTestUdpReadFunctionTest (
   BcIpFilter.IpCnt = 2;
   SetIpAddress ((EFI_IP_ADDRESS *)&(BcIpFilter.IpList[0]), 0x12345678);
   SetIpAddress ((EFI_IP_ADDRESS *)&(BcIpFilter.IpList[1]), 0x87654321);
-  Status = BcInterface->SetIpFilter (BcInterface, &BcIpFilter);
+  Status = BaseCodeInterface->SetIpFilter (BaseCodeInterface, &BcIpFilter);
   if (EFI_ERROR(Status)){
     StandardLib->RecordAssertion (
                    StandardLib,
@@ -2506,27 +2506,27 @@ BBTestUdpReadFunctionTest (
 
   // Basic Function
   LOG_CHAR16_ASCII_DFLT(LoggingLib, L"UdpRead: basic test", SctStrLen (L"UdpRead: basic test"));
-  BBTestUdpReadFuncBasic(BcInterface, StandardLib, LoggingLib, &BcIpFilter);
+  BBTestUdpReadFuncBasic(BaseCodeInterface, StandardLib, LoggingLib, &BcIpFilter);
 
  // Dest IP Filter
   LOG_CHAR16_ASCII_DFLT(LoggingLib, L"UdpRead: Dest Ip Filter", SctStrLen (L"UdpRead: Dest Ip Filter"));
-  COPY_IP_FILTER (&BcIpFilter, &BcInterface->Mode->IpFilter);
-  BBTestUdpReadFuncDesIpFilter (BcInterface, StandardLib, LoggingLib, &BcIpFilter);
+  COPY_IP_FILTER (&BcIpFilter, &BaseCodeInterface->Mode->IpFilter);
+  BBTestUdpReadFuncDesIpFilter (BaseCodeInterface, StandardLib, LoggingLib, &BcIpFilter);
 
   // Dest Port Filter
   LOG_CHAR16_ASCII_DFLT(LoggingLib, L"UdpRead: Dest Port Filter", SctStrLen (L"UdpRead: Dest Port Filter"));
-  COPY_IP_FILTER (&BcIpFilter, &BcInterface->Mode->IpFilter);
-  BBTestUdpReadFuncDestPortFilter (BcInterface, StandardLib, LoggingLib, &BcIpFilter);
+  COPY_IP_FILTER (&BcIpFilter, &BaseCodeInterface->Mode->IpFilter);
+  BBTestUdpReadFuncDestPortFilter (BaseCodeInterface, StandardLib, LoggingLib, &BcIpFilter);
 
   // Source IP Filter
   LOG_CHAR16_ASCII_DFLT(LoggingLib, L"UdpRead: Source Ip Filter", SctStrLen (L"UdpRead: Source Ip Filter"));
-  COPY_IP_FILTER (&BcIpFilter, &BcInterface->Mode->IpFilter);
-  BBTestUdpReadFuncSrcIpFilter (BcInterface, StandardLib, LoggingLib, FileHandle, &BcIpFilter);
+  COPY_IP_FILTER (&BcIpFilter, &BaseCodeInterface->Mode->IpFilter);
+  BBTestUdpReadFuncSrcIpFilter (BaseCodeInterface, StandardLib, LoggingLib, FileHandle, &BcIpFilter);
 
   // Source Port Filter
   LOG_CHAR16_ASCII_DFLT(LoggingLib, L"UdpRead: Source Port Filter", SctStrLen (L"UdpRead: Source Port Filter"));
-  COPY_IP_FILTER (&BcIpFilter, &BcInterface->Mode->IpFilter);
-  BBTestUdpReadFuncSrcPortFilter (BcInterface, StandardLib, LoggingLib, &BcIpFilter);
+  COPY_IP_FILTER (&BcIpFilter, &BaseCodeInterface->Mode->IpFilter);
+  BBTestUdpReadFuncSrcPortFilter (BaseCodeInterface, StandardLib, LoggingLib, &BcIpFilter);
 
   return CloseTestIniFile (ProfileLib, FileHandle);
 }
@@ -2554,7 +2554,7 @@ BBTestSetIpFilterFunctionTest (
   EFI_TEST_LOGGING_LIBRARY_PROTOCOL     *LoggingLib;
   EFI_STATUS                             Status;
   EFI_TEST_ASSERTION                     AssertionType;
-  EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface;
   EFI_PXE_BASE_CODE_IP_FILTER            BcIpFilter;
 
   //
@@ -2574,12 +2574,12 @@ BBTestSetIpFilterFunctionTest (
   //
   // Get the EFI_PXE_BASE_CODE_PROTOCOL Protocol interface to be tested
   //
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
   //
   // Enable EFI_PXE_BASE_CODE_PROTOCOL if needed
   //
-  Status = ReInitPxeBaseCode (BcInterface);
+  Status = ReInitPxeBaseCode (BaseCodeInterface);
   if (EFI_ERROR(Status))
   {
     StandardLib->RecordAssertion (
@@ -2601,7 +2601,7 @@ BBTestSetIpFilterFunctionTest (
   SetIpAddress ((EFI_IP_ADDRESS *)&(BcIpFilter.IpList[0]), 0x12345678);
   SetIpAddress ((EFI_IP_ADDRESS *)&(BcIpFilter.IpList[1]), 0x87654321);
 
-  Status = BcInterface->SetIpFilter (BcInterface, &BcIpFilter);
+  Status = BaseCodeInterface->SetIpFilter (BaseCodeInterface, &BcIpFilter);
   if (Status == EFI_SUCCESS) {
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   } else {
@@ -2619,8 +2619,8 @@ BBTestSetIpFilterFunctionTest (
                  );
 
   LOG_BUF_HEX_DFLT (LoggingLib, (CHAR16 *)&BcIpFilter, sizeof(BcIpFilter)/2);
-  LOG_BUF_HEX_DFLT (LoggingLib, (CHAR16 *)&(BcInterface->Mode->IpFilter), sizeof (BcIpFilter)/2);
-  if (TRUE == IsIpFilterEqual (&BcIpFilter, &(BcInterface->Mode->IpFilter))){
+  LOG_BUF_HEX_DFLT (LoggingLib, (CHAR16 *)&(BaseCodeInterface->Mode->IpFilter), sizeof (BcIpFilter)/2);
+  if (TRUE == IsIpFilterEqual (&BcIpFilter, &(BaseCodeInterface->Mode->IpFilter))){
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   } else {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
@@ -2664,7 +2664,7 @@ BBTestArpFunctionTest (
   EFI_INI_FILE_HANDLE                    FileHandle;
   EFI_STATUS                             Status;
   EFI_TEST_ASSERTION                     AssertionType;
-  EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface;
   EFI_IP_ADDRESS                         IpAddr;
   EFI_MAC_ADDRESS                        MacAddr;
   EFI_SIMPLE_NETWORK_PROTOCOL            *SnpInterface;
@@ -2695,9 +2695,9 @@ BBTestArpFunctionTest (
   //
   // Get the EFI_PXE_BASE_CODE_PROTOCOL Protocol interface to be tested
   //
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
-  Status = ReInitPxeBaseCode (BcInterface);
+  Status = ReInitPxeBaseCode (BaseCodeInterface);
   if (EFI_ERROR(Status)){
     StandardLib->RecordAssertion (
                    StandardLib,
@@ -2797,7 +2797,7 @@ BBTestArpFunctionTest (
   //
   SctPrint (L"\r\nSetup DHCP Server\r\n");
   WaitForAnyInput ();
-  Status = BcInterface->Dhcp (BcInterface, FALSE);
+  Status = BaseCodeInterface->Dhcp (BaseCodeInterface, FALSE);
   if (EFI_ERROR(Status))
   {
     StandardLib->RecordAssertion (
@@ -2814,7 +2814,7 @@ BBTestArpFunctionTest (
 
   // Call ARP() to get the specified mac
   SctSetMem (&MacAddr, sizeof (MacAddr), 0);
-  Status = BcInterface->Arp (BcInterface, &IpAddr, &MacAddr);
+  Status = BaseCodeInterface->Arp (BaseCodeInterface, &IpAddr, &MacAddr);
   if (EFI_UNSUPPORTED == Status)
   {
     StandardLib->RecordAssertion (
@@ -2868,7 +2868,7 @@ BBTestArpFunctionTest (
                  );
 
   // Check ArpCachEntries and ArpCache
-  Status = PrintArpTable (LoggingLib, BcInterface->Mode);
+  Status = PrintArpTable (LoggingLib, BaseCodeInterface->Mode);
   if (EFI_ERROR(Status))
     StandardLib->RecordAssertion (
                    StandardLib,
@@ -2906,7 +2906,7 @@ BBTestSetParametersFunctionTest (
   EFI_STANDARD_TEST_LIBRARY_PROTOCOL    *StandardLib;
   EFI_STATUS                            Status;
   EFI_TEST_ASSERTION                    AssertionType;
-  EFI_PXE_BASE_CODE_PROTOCOL           *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL           *BaseCodeInterface;
   BOOLEAN                               OrigAutoArp, NewAutoArp;
   UINT8                                 OrigTTL, NewTTL;
 
@@ -2927,12 +2927,12 @@ BBTestSetParametersFunctionTest (
   //
   // Get the EFI_PXE_BASE_CODE_PROTOCOL Protocol interface to be tested
   //
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
   //
   // Enable EFI_PXE_BASE_CODE_PROTOCOL if needed
   //
-  Status = ChangePxeState (BcInterface, FALSE, BcInterface->Mode->Started, TRUE);
+  Status = ChangePxeState (BaseCodeInterface, FALSE, BaseCodeInterface->Mode->Started, TRUE);
   if (EFI_ERROR(Status)) {
     StandardLib->RecordAssertion (
                    StandardLib,
@@ -2950,11 +2950,11 @@ BBTestSetParametersFunctionTest (
   //
   // Basic Function of SetParameter
   //
-  OrigAutoArp = BcInterface->Mode->AutoArp;
-  OrigTTL = BcInterface->Mode->TTL;
-//  OrigSendGUID = BcInterface->Mode->SendGUID;
-//  OrigToS = BcInterface->Mode->ToS;
-//  OrigMakeCallback = BcInterface->Mode->MakeCallbacks;
+  OrigAutoArp = BaseCodeInterface->Mode->AutoArp;
+  OrigTTL = BaseCodeInterface->Mode->TTL;
+//  OrigSendGUID = BaseCodeInterface->Mode->SendGUID;
+//  OrigToS = BaseCodeInterface->Mode->ToS;
+//  OrigMakeCallback = BaseCodeInterface->Mode->MakeCallbacks;
 
   NewTTL = (UINT8)(OrigTTL + 1);
   if (OrigAutoArp==TRUE) {
@@ -2978,8 +2978,8 @@ BBTestSetParametersFunctionTest (
   }
   */
   // set new parameters
-//  Status = BcInterface->SetParameters (BcInterface, &NewAutoArp, &NewSendGUID, &NewTTL, &NewToS, &NewMakeCallback);
-  Status = BcInterface->SetParameters (BcInterface, &NewAutoArp, NULL, &NewTTL, NULL, NULL);
+//  Status = BaseCodeInterface->SetParameters (BaseCodeInterface, &NewAutoArp, &NewSendGUID, &NewTTL, &NewToS, &NewMakeCallback);
+  Status = BaseCodeInterface->SetParameters (BaseCodeInterface, &NewAutoArp, NULL, &NewTTL, NULL, NULL);
   if (Status == EFI_SUCCESS) {
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   } else {
@@ -2997,12 +2997,12 @@ BBTestSetParametersFunctionTest (
                  );
 
   /*
-      BcInterface->Mode->SendGUID == NewSendGUID        &&
-      BcInterface->Mode->ToS == NewToS                  &&
-      BcInterface->Mode->MakeCallbacks == NewMakeCallback){
+      BaseCodeInterface->Mode->SendGUID == NewSendGUID        &&
+      BaseCodeInterface->Mode->ToS == NewToS                  &&
+      BaseCodeInterface->Mode->MakeCallbacks == NewMakeCallback){
   */
-  if (BcInterface->Mode->AutoArp == NewAutoArp          &&
-      BcInterface->Mode->TTL == NewTTL){
+  if (BaseCodeInterface->Mode->AutoArp == NewAutoArp          &&
+      BaseCodeInterface->Mode->TTL == NewTTL){
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   } else {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
@@ -3019,8 +3019,8 @@ BBTestSetParametersFunctionTest (
                  );
 
   // recover original parameter
-//  Status = BcInterface->SetParameters (BcInterface, &OrigAutoArp, &OrigSendGUID, &OrigTTL, &OrigToS, &OrigMakeCallback);
-  Status = BcInterface->SetParameters (BcInterface, &OrigAutoArp, NULL, &OrigTTL, NULL, NULL);
+//  Status = BaseCodeInterface->SetParameters (BaseCodeInterface, &OrigAutoArp, &OrigSendGUID, &OrigTTL, &OrigToS, &OrigMakeCallback);
+  Status = BaseCodeInterface->SetParameters (BaseCodeInterface, &OrigAutoArp, NULL, &OrigTTL, NULL, NULL);
   if (EFI_ERROR(Status)) {
     StandardLib->RecordAssertion (
                    StandardLib,
@@ -3036,7 +3036,7 @@ BBTestSetParametersFunctionTest (
 
   // Disable AutoARP
   NewAutoArp = FALSE;
-  Status = BcInterface->SetParameters (BcInterface, &NewAutoArp, NULL, NULL, NULL, NULL);
+  Status = BaseCodeInterface->SetParameters (BaseCodeInterface, &NewAutoArp, NULL, NULL, NULL, NULL);
   if (EFI_ERROR(Status)){
     StandardLib->RecordAssertion (
                    StandardLib,
@@ -3058,8 +3058,8 @@ BBTestSetParametersFunctionTest (
     EFI_IP_ADDRESS ServerIp;
 
     SetIpAddress (&ServerIp, 0x01010101);
-    BcInterface->Mtftp (
-                   BcInterface,
+    BaseCodeInterface->Mtftp (
+                   BaseCodeInterface,
                    EFI_PXE_BASE_CODE_MTFTP_GET_FILE_SIZE,
                    NULL,
                    FALSE,
@@ -3116,7 +3116,7 @@ BBTestSetStationIpFunctionTest (
   EFI_TEST_LOGGING_LIBRARY_PROTOCOL     *LoggingLib;
   EFI_STATUS                            Status;
   EFI_TEST_ASSERTION                    AssertionType;
-  EFI_PXE_BASE_CODE_PROTOCOL           *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL           *BaseCodeInterface;
   EFI_IP_ADDRESS                        NewStationIp, NewSubnetMask;
 
   //
@@ -3145,12 +3145,12 @@ BBTestSetStationIpFunctionTest (
   //
   // Get the EFI_PXE_BASE_CODE_PROTOCOL Protocol interface to be tested
   //
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
   //
   // Enable EFI_PXE_BASE_CODE_PROTOCOL if needed
   //
-  Status = ChangePxeState (BcInterface, FALSE, BcInterface->Mode->Started, TRUE);
+  Status = ChangePxeState (BaseCodeInterface, FALSE, BaseCodeInterface->Mode->Started, TRUE);
   if (EFI_ERROR(Status)) {
     StandardLib->RecordAssertion (
                    StandardLib,
@@ -3166,7 +3166,7 @@ BBTestSetStationIpFunctionTest (
   }
 
   // IP address = 192.168.0.1, NetMask = 255.255.255.0
-  Status = BBTestSetStationIp (BcInterface, StandardLib, LoggingLib, &NewStationIp,
+  Status = BBTestSetStationIp (BaseCodeInterface, StandardLib, LoggingLib, &NewStationIp,
                               &NewSubnetMask, 0xc0a80001, 0xffffff00);
   if (Status == EFI_SUCCESS) {
     AssertionType = EFI_TEST_ASSERTION_PASSED;
@@ -3185,7 +3185,7 @@ BBTestSetStationIpFunctionTest (
                  );
 
   // IP address = 192.168.0.2
-  Status = BBTestSetStationIp (BcInterface, StandardLib, LoggingLib, &NewStationIp,
+  Status = BBTestSetStationIp (BaseCodeInterface, StandardLib, LoggingLib, &NewStationIp,
                               NULL, 0xc0a80002, 0);
   if (Status == EFI_SUCCESS) {
     AssertionType = EFI_TEST_ASSERTION_PASSED;
@@ -3204,7 +3204,7 @@ BBTestSetStationIpFunctionTest (
                  );
 
   // NetMask = 255.255.255.240
-  Status = BBTestSetStationIp (BcInterface, StandardLib, LoggingLib, NULL,
+  Status = BBTestSetStationIp (BaseCodeInterface, StandardLib, LoggingLib, NULL,
                               &NewSubnetMask, 0, 0xfffffff0);
   if (Status == EFI_SUCCESS) {
     AssertionType = EFI_TEST_ASSERTION_PASSED;
@@ -3246,7 +3246,7 @@ BBTestSetPacketsFunctionTest (
   EFI_STANDARD_TEST_LIBRARY_PROTOCOL   *StandardLib;
   EFI_STATUS                            Status;
   EFI_TEST_ASSERTION                    AssertionType;
-  EFI_PXE_BASE_CODE_PROTOCOL           *BcInterface;
+  EFI_PXE_BASE_CODE_PROTOCOL           *BaseCodeInterface;
   BOOLEAN                               NewDhcpDiscoverValid;
   BOOLEAN                               NewDhcpAckReceived;
   BOOLEAN                               NewProxyOfferReceived ;
@@ -3276,10 +3276,10 @@ BBTestSetPacketsFunctionTest (
   //
   // Get the EFI_PXE_BASE_CODE_PROTOCOL Protocol interface to be tested
   //
-  BcInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
+  BaseCodeInterface = (EFI_PXE_BASE_CODE_PROTOCOL *)ClientInterface;
 
   // Re-initialize the EFI_PXE_BASE_CODE_PROTOCOL
-  Status = ReInitPxeBaseCode (BcInterface);
+  Status = ReInitPxeBaseCode (BaseCodeInterface);
   if (EFI_ERROR(Status)){
     StandardLib->RecordAssertion (
                    StandardLib,
@@ -3295,17 +3295,17 @@ BBTestSetPacketsFunctionTest (
   }
   // Call Dhcp() function to fill the fields
   SctPrint (L"\r\n Start DHCP Server\n");
-  Status = BcInterface->Dhcp (BcInterface, FALSE);
+  Status = BaseCodeInterface->Dhcp (BaseCodeInterface, FALSE);
   if (EFI_ERROR(Status)) {
     return Status;
   }
   // Copy fields from current mode
-  NewDhcpDiscoverValid = BcInterface->Mode->DhcpDiscoverValid;
-  NewDhcpAckReceived = BcInterface->Mode->DhcpAckReceived;
-  NewProxyOfferReceived = BcInterface->Mode->ProxyOfferReceived;
-  NewPxeDiscoverValid = BcInterface->Mode->PxeDiscoverValid;
-  NewPxeReplyReceived = BcInterface->Mode->PxeReplyReceived;
-  NewPxeBisReplyReceived = BcInterface->Mode->PxeBisReplyReceived;
+  NewDhcpDiscoverValid = BaseCodeInterface->Mode->DhcpDiscoverValid;
+  NewDhcpAckReceived = BaseCodeInterface->Mode->DhcpAckReceived;
+  NewProxyOfferReceived = BaseCodeInterface->Mode->ProxyOfferReceived;
+  NewPxeDiscoverValid = BaseCodeInterface->Mode->PxeDiscoverValid;
+  NewPxeReplyReceived = BaseCodeInterface->Mode->PxeReplyReceived;
+  NewPxeBisReplyReceived = BaseCodeInterface->Mode->PxeBisReplyReceived;
 
   // Allocate Pool for PXE Packet
   Status = gtBS->AllocatePool (EfiBootServicesData, sizeof (EFI_PXE_BASE_CODE_PACKET), (VOID **) &NewDhcpDiscover);
@@ -3358,15 +3358,15 @@ BBTestSetPacketsFunctionTest (
     return Status;
   }
 
-  CopyPxePacket (NewDhcpDiscover, &BcInterface->Mode->DhcpDiscover);
-  CopyPxePacket (NewDhcpAck, &BcInterface->Mode->DhcpAck);
-  CopyPxePacket (NewProxyOffer, &BcInterface->Mode->ProxyOffer);
-  CopyPxePacket (NewPxeDiscover, &BcInterface->Mode->PxeDiscover);
-  CopyPxePacket (NewPxeReply, &BcInterface->Mode->PxeReply);
-  CopyPxePacket (NewPxeBisReply, &BcInterface->Mode->PxeBisReply);
+  CopyPxePacket (NewDhcpDiscover, &BaseCodeInterface->Mode->DhcpDiscover);
+  CopyPxePacket (NewDhcpAck, &BaseCodeInterface->Mode->DhcpAck);
+  CopyPxePacket (NewProxyOffer, &BaseCodeInterface->Mode->ProxyOffer);
+  CopyPxePacket (NewPxeDiscover, &BaseCodeInterface->Mode->PxeDiscover);
+  CopyPxePacket (NewPxeReply, &BaseCodeInterface->Mode->PxeReply);
+  CopyPxePacket (NewPxeBisReply, &BaseCodeInterface->Mode->PxeBisReply);
 
   // Re-initialize PXE protocol
-  Status = ReInitPxeBaseCode (BcInterface);
+  Status = ReInitPxeBaseCode (BaseCodeInterface);
   if (EFI_ERROR(Status)){
     StandardLib->RecordAssertion (
                    StandardLib,
@@ -3387,8 +3387,8 @@ BBTestSetPacketsFunctionTest (
     return Status;
   }
 
-  Status = BcInterface->SetPackets (
-                          BcInterface,
+  Status = BaseCodeInterface->SetPackets (
+                          BaseCodeInterface,
                           &NewDhcpDiscoverValid,
                           &NewDhcpAckReceived,
                           &NewProxyOfferReceived,
@@ -3419,18 +3419,18 @@ BBTestSetPacketsFunctionTest (
                  );
 
   // Check Mode
-  if (BcInterface->Mode->DhcpDiscoverValid == NewDhcpDiscoverValid              &&
-      BcInterface->Mode->DhcpAckReceived == NewDhcpAckReceived                  &&
-      BcInterface->Mode->PxeDiscoverValid == NewPxeDiscoverValid                &&
-      BcInterface->Mode->PxeReplyReceived == NewPxeReplyReceived                &&
-      BcInterface->Mode->ProxyOfferReceived == NewProxyOfferReceived            &&
-      BcInterface->Mode->PxeBisReplyReceived == NewPxeReplyReceived             &&
-      (TRUE == IsPxePacketEqual (NewDhcpDiscover, &BcInterface->Mode->DhcpDiscover)) &&
-      (TRUE == IsPxePacketEqual (NewDhcpAck, &BcInterface->Mode->DhcpAck))      &&
-      (TRUE == IsPxePacketEqual (NewProxyOffer, &BcInterface->Mode->ProxyOffer))&&
-      (TRUE == IsPxePacketEqual (NewPxeDiscover, &BcInterface->Mode->PxeDiscover))&&
-      (TRUE == IsPxePacketEqual (NewPxeReply, &BcInterface->Mode->PxeReply))    &&
-      (TRUE == IsPxePacketEqual (NewPxeBisReply, &BcInterface->Mode->PxeBisReply))){
+  if (BaseCodeInterface->Mode->DhcpDiscoverValid == NewDhcpDiscoverValid              &&
+      BaseCodeInterface->Mode->DhcpAckReceived == NewDhcpAckReceived                  &&
+      BaseCodeInterface->Mode->PxeDiscoverValid == NewPxeDiscoverValid                &&
+      BaseCodeInterface->Mode->PxeReplyReceived == NewPxeReplyReceived                &&
+      BaseCodeInterface->Mode->ProxyOfferReceived == NewProxyOfferReceived            &&
+      BaseCodeInterface->Mode->PxeBisReplyReceived == NewPxeReplyReceived             &&
+      (TRUE == IsPxePacketEqual (NewDhcpDiscover, &BaseCodeInterface->Mode->DhcpDiscover)) &&
+      (TRUE == IsPxePacketEqual (NewDhcpAck, &BaseCodeInterface->Mode->DhcpAck))      &&
+      (TRUE == IsPxePacketEqual (NewProxyOffer, &BaseCodeInterface->Mode->ProxyOffer))&&
+      (TRUE == IsPxePacketEqual (NewPxeDiscover, &BaseCodeInterface->Mode->PxeDiscover))&&
+      (TRUE == IsPxePacketEqual (NewPxeReply, &BaseCodeInterface->Mode->PxeReply))    &&
+      (TRUE == IsPxePacketEqual (NewPxeBisReply, &BaseCodeInterface->Mode->PxeBisReply))){
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   } else {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
@@ -4806,7 +4806,7 @@ BBTestSetStationIp (
 
 EFI_STATUS
 BBTestUdpReadFuncBasic (
-  IN EFI_PXE_BASE_CODE_PROTOCOL          *BcInterface,
+  IN EFI_PXE_BASE_CODE_PROTOCOL          *BaseCodeInterface,
   IN EFI_STANDARD_TEST_LIBRARY_PROTOCOL  *StandardLib,
   IN EFI_TEST_LOGGING_LIBRARY_PROTOCOL   *LoggingLib,
   IN EFI_PXE_BASE_CODE_IP_FILTER         *OrigIpFilter
@@ -4836,8 +4836,8 @@ BBTestUdpReadFuncBasic (
             EFI_PXE_BASE_CODE_UDP_OPFLAGS_ANY_SRC_IP |
             EFI_PXE_BASE_CODE_UDP_OPFLAGS_ANY_SRC_PORT;
 
-  Status = BcInterface->UdpRead (
-                          BcInterface,
+  Status = BaseCodeInterface->UdpRead (
+                          BaseCodeInterface,
                           OpFlags,
                           NULL,
                           &DestPort,
@@ -4888,8 +4888,8 @@ BBTestUdpReadFuncBasic (
             EFI_PXE_BASE_CODE_UDP_OPFLAGS_ANY_SRC_IP |
             EFI_PXE_BASE_CODE_UDP_OPFLAGS_ANY_SRC_PORT;
 
-  Status = BcInterface->UdpRead (
-                          BcInterface,
+  Status = BaseCodeInterface->UdpRead (
+                          BaseCodeInterface,
                           OpFlags,
                           NULL,
                           &DestPort,
@@ -4940,7 +4940,7 @@ BBTestUdpReadFuncBasic (
                  );
 
   // Check if IPFilter changed
-  if (TRUE==IsIpFilterEqual (OrigIpFilter, &(BcInterface->Mode->IpFilter)))
+  if (TRUE==IsIpFilterEqual (OrigIpFilter, &(BaseCodeInterface->Mode->IpFilter)))
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   else
     AssertionType = EFI_TEST_ASSERTION_FAILED;
@@ -4960,7 +4960,7 @@ BBTestUdpReadFuncBasic (
 
 EFI_STATUS
 BBTestUdpReadFuncDesIpFilter (
-  IN EFI_PXE_BASE_CODE_PROTOCOL         *BcInterface,
+  IN EFI_PXE_BASE_CODE_PROTOCOL         *BaseCodeInterface,
   IN EFI_STANDARD_TEST_LIBRARY_PROTOCOL *StandardLib,
   IN EFI_TEST_LOGGING_LIBRARY_PROTOCOL  *LoggingLib,
   IN EFI_PXE_BASE_CODE_IP_FILTER        *OrigIpFilter
@@ -4990,10 +4990,10 @@ BBTestUdpReadFuncDesIpFilter (
   WaitForAnyInput ();
 
   // Call UdpRead() to read UDP Packet
-  Status = BcInterface->UdpRead (
-                          BcInterface,
+  Status = BaseCodeInterface->UdpRead (
+                          BaseCodeInterface,
                           OpFlags,
-                          &BcInterface->Mode->StationIp,
+                          &BaseCodeInterface->Mode->StationIp,
                           &DestPort,
                           &SrcIp,
                           &SrcPort,
@@ -5048,7 +5048,7 @@ BBTestUdpReadFuncDesIpFilter (
                  );
 
   // Check Mode
-  if (TRUE==IsIpFilterEqual (OrigIpFilter, &(BcInterface->Mode->IpFilter)))
+  if (TRUE==IsIpFilterEqual (OrigIpFilter, &(BaseCodeInterface->Mode->IpFilter)))
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   else
     AssertionType = EFI_TEST_ASSERTION_FAILED;
@@ -5064,10 +5064,10 @@ BBTestUdpReadFuncDesIpFilter (
                  );
 
   // Call UdpRead() to read UDP Packet
-  Status = BcInterface->UdpRead (
-                          BcInterface,
+  Status = BaseCodeInterface->UdpRead (
+                          BaseCodeInterface,
                           OpFlags,
-                          &BcInterface->Mode->StationIp,
+                          &BaseCodeInterface->Mode->StationIp,
                           &DestPort,
                           &SrcIp,
                           &SrcPort,
@@ -5100,7 +5100,7 @@ BBTestUdpReadFuncDesIpFilter (
 
 EFI_STATUS
 BBTestUdpReadFuncDestPortFilter (
-  IN EFI_PXE_BASE_CODE_PROTOCOL         *BcInterface,
+  IN EFI_PXE_BASE_CODE_PROTOCOL         *BaseCodeInterface,
   IN EFI_STANDARD_TEST_LIBRARY_PROTOCOL *StandardLib,
   IN EFI_TEST_LOGGING_LIBRARY_PROTOCOL  *LoggingLib,
   IN EFI_PXE_BASE_CODE_IP_FILTER        *OrigIpFilter
@@ -5130,10 +5130,10 @@ BBTestUdpReadFuncDestPortFilter (
   WaitForAnyInput ();
 
   // Call UdpRead() to read UDP Packet
-  Status = BcInterface->UdpRead (
-                          BcInterface,
+  Status = BaseCodeInterface->UdpRead (
+                          BaseCodeInterface,
                           OpFlags,
-                          &BcInterface->Mode->StationIp,
+                          &BaseCodeInterface->Mode->StationIp,
                           &DestPort,
                           &SrcIp,
                           &SrcPort,
@@ -5184,7 +5184,7 @@ BBTestUdpReadFuncDestPortFilter (
                  );
 
   // Check Mode
-  if (TRUE==IsIpFilterEqual (OrigIpFilter, &(BcInterface->Mode->IpFilter))) {
+  if (TRUE==IsIpFilterEqual (OrigIpFilter, &(BaseCodeInterface->Mode->IpFilter))) {
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   } else {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
@@ -5205,10 +5205,10 @@ BBTestUdpReadFuncDestPortFilter (
   WaitForAnyInput ();
 
   // Call UdpRead() to read UDP Packet
-  Status = BcInterface->UdpRead (
-                          BcInterface,
+  Status = BaseCodeInterface->UdpRead (
+                          BaseCodeInterface,
                           OpFlags,
-                          &BcInterface->Mode->StationIp,
+                          &BaseCodeInterface->Mode->StationIp,
                           &DestPort,
                           &SrcIp,
                           &SrcPort,
@@ -5241,7 +5241,7 @@ BBTestUdpReadFuncDestPortFilter (
 
 EFI_STATUS
 BBTestUdpReadFuncSrcIpFilter (
-  IN EFI_PXE_BASE_CODE_PROTOCOL         *BcInterface,
+  IN EFI_PXE_BASE_CODE_PROTOCOL         *BaseCodeInterface,
   IN EFI_STANDARD_TEST_LIBRARY_PROTOCOL *StandardLib,
   IN EFI_TEST_LOGGING_LIBRARY_PROTOCOL  *LoggingLib,
   IN EFI_INI_FILE_HANDLE                 FileHandle,
@@ -5275,10 +5275,10 @@ BBTestUdpReadFuncSrcIpFilter (
   WaitForAnyInput ();
 
   // Call UdpRead() to read UDP Packet
-  Status = BcInterface->UdpRead (
-                          BcInterface,
+  Status = BaseCodeInterface->UdpRead (
+                          BaseCodeInterface,
                           OpFlags,
-                          &BcInterface->Mode->StationIp,
+                          &BaseCodeInterface->Mode->StationIp,
                           &DestPort,
                           &SrcIp,
                           &SrcPort,
@@ -5328,7 +5328,7 @@ BBTestUdpReadFuncSrcIpFilter (
                  );
 
   // Check Mode
-  if (TRUE==IsIpFilterEqual (OrigIpFilter, &(BcInterface->Mode->IpFilter)))
+  if (TRUE==IsIpFilterEqual (OrigIpFilter, &(BaseCodeInterface->Mode->IpFilter)))
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   else
     AssertionType = EFI_TEST_ASSERTION_FAILED;
@@ -5348,10 +5348,10 @@ BBTestUdpReadFuncSrcIpFilter (
   WaitForAnyInput ();
 
   // Call UdpRead() to read UDP Packet
-  Status = BcInterface->UdpRead (
-                          BcInterface,
+  Status = BaseCodeInterface->UdpRead (
+                          BaseCodeInterface,
                           OpFlags,
-                          &BcInterface->Mode->StationIp,
+                          &BaseCodeInterface->Mode->StationIp,
                           &DestPort,
                           &SrcIp,
                           &SrcPort,
@@ -5384,7 +5384,7 @@ BBTestUdpReadFuncSrcIpFilter (
 
 EFI_STATUS
 BBTestUdpReadFuncSrcPortFilter (
-  IN EFI_PXE_BASE_CODE_PROTOCOL            *BcInterface,
+  IN EFI_PXE_BASE_CODE_PROTOCOL            *BaseCodeInterface,
   IN EFI_STANDARD_TEST_LIBRARY_PROTOCOL    *StandardLib,
   IN EFI_TEST_LOGGING_LIBRARY_PROTOCOL     *LoggingLib,
   IN EFI_PXE_BASE_CODE_IP_FILTER           *OrigIpFilter
@@ -5415,10 +5415,10 @@ BBTestUdpReadFuncSrcPortFilter (
   WaitForAnyInput ();
 
   // Call UdpRead () to read UDP Packet
-  Status = BcInterface->UdpRead (
-                          BcInterface,
+  Status = BaseCodeInterface->UdpRead (
+                          BaseCodeInterface,
                           OpFlags,
-                          &BcInterface->Mode->StationIp,
+                          &BaseCodeInterface->Mode->StationIp,
                           &DestPort,
                           &SrcIp,
                           &SrcPort,
@@ -5468,7 +5468,7 @@ BBTestUdpReadFuncSrcPortFilter (
                  );
 
   // Check Mode
-  if (TRUE==IsIpFilterEqual (OrigIpFilter, &(BcInterface->Mode->IpFilter))) {
+  if (TRUE==IsIpFilterEqual (OrigIpFilter, &(BaseCodeInterface->Mode->IpFilter))) {
     AssertionType = EFI_TEST_ASSERTION_PASSED;
   } else {
     AssertionType = EFI_TEST_ASSERTION_FAILED;
@@ -5489,10 +5489,10 @@ BBTestUdpReadFuncSrcPortFilter (
   WaitForAnyInput ();
 
   // Call UdpRead() to read UDP Packet
-  Status = BcInterface->UdpRead (
-                          BcInterface,
+  Status = BaseCodeInterface->UdpRead (
+                          BaseCodeInterface,
                           OpFlags,
-                          &BcInterface->Mode->StationIp,
+                          &BaseCodeInterface->Mode->StationIp,
                           &DestPort,
                           &SrcIp,
                           &SrcPort,
